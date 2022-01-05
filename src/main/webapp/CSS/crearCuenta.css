@@ -1,0 +1,67 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Montserrat, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+
+/* Form */
+.form {
+  width: 400px;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  border-radius: 0.35rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.data {
+    display: none;
+    height: 350px;
+}
+
+.activo{
+    display: block;
+}
+.form__group {
+    border-radius: 5px;
+    padding: .5rem;
+}
+label {
+    display: block;
+    font-weight: bolder;
+}
+input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+input:focus{
+    border-bottom: 1px solid black;
+}
+.input__msg {
+    font-size: 12px;
+}
+.show {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+
+}
+.show label {
+    font-size: 14px;
+    font-weight: 400;
+}

@@ -1,0 +1,84 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 29-dic-2021, 18:15:46
+    Author     : Manuel Guillén Gallardo
+*/
+
+:root{
+    --c-primary: #F68E5F;
+    --c-secondary: #070212;
+    --c-error: #F76C5E;
+    --c-info: #F5DD90;
+}
+.container__vista__producto {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: fit-content;
+    margin-top: 70px;
+}
+.container__vista__producto__img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem;
+    width: 500px;
+}
+.container__vista__producto__img img{
+    width: 400px;
+    height: 400px;
+}
+.container__vista__producto__descripcion {
+    width: 600px;
+    padding: 2rem;
+}
+.vista__producto__descripcion__titulo {
+    font-size: 30px;
+    font-weight: bolder;
+}
+.vista__producto__descripcion__precio {
+    font-size: 60px;
+    font-weight: bolder;
+    color: var(--c-primary);
+}
+table {
+    width: 100%;
+    padding-top: .5rem;
+    font-size: 20px;
+}
+tr td:nth-child(1){
+    width: 25%;
+    font-weight: bolder;
+}
+td {
+    padding: .2rem 0;
+    vertical-align: top;
+}
+
+.vista__producto__btn {
+    cursor: pointer;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--c-secondary);
+    border: none;
+    color: var(--c-primary);
+    transition: .4s ease-in-out;
+    width: 100%;
+}
+.vista__producto__btn span {
+    font-size: 30px;
+}
+.vista__producto__btn:hover {
+    background: var(--c-primary);
+    color: white;
+}
