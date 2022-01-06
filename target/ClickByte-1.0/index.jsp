@@ -85,7 +85,7 @@
                                     </div>
                                 </c:forEach>
                             </c:when>
-                            <c:when test="${sessionScope.listaProductosCarrito==null}">
+                            <c:when test="${sessionScope.listaProductosCarrito.isEmpty()}">
                                 <h2>El carrito está vacío</h2>
                             </c:when>
                         </c:choose>

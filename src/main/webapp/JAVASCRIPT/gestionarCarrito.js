@@ -73,7 +73,7 @@ function nuevoProductoCarrito(idProducto) {
                                                         <span class='material-icons'>add</span>\n\
                                                     </div>\n\
                                                 </div>\n\
-                                                <p class='producto__carrito__precio'>" + infoProducto.precio + ",00 €</p>\n\
+                                                <p class='producto__carrito__precio'>" + infoProducto.precio + ",00 &euro;</p>\n\
                                                 </div>\n\
                                             </div>";
                 let nuevoFooterCarrito = "<div class='container__total__unidades'>\n\
@@ -82,7 +82,7 @@ function nuevoProductoCarrito(idProducto) {
                                             </div>\n\
                                             <div class='container__total'>\n\
                                             <p>Total: </p>\n\
-                                            <p>" + infoProducto.total + ",00</p>\n\
+                                            <p>" + infoProducto.total + ",00 &euro;</p>\n\
                                             </div>\n\
                                             <form action='FinalizarCarrito' method='POST' class='acciones__carrito'>\n\
                                             <button name='accionCarrito' value='eliminar' class='accion__carrito'>\n\
@@ -105,18 +105,7 @@ function nuevoProductoCarrito(idProducto) {
                     carrito__body.innerHTML = nuevoProducto;
                     count__producto.innerText = parseInt(count__producto.innerText) + 1;
                 }
-                if (carrito__footer.childElementCount > 0) {
-                    document.querySelector("#total__productos").innerText = infoProducto.cantidadTotal;
-                    if(isNaN(document.querySelector("#total__carrito").innerText)){
-                        let totalPreText = document.querySelector("#total__carrito").innerText.slice(3,-2);
-                        document.querySelector("#total__carrito").innerText = parseFloat(totalPreText) + infoProducto.precio;
-                    } else {
-                        let totalPre = document.querySelector("#total__carrito").innerText;
-                        document.querySelector("#total__carrito").innerText = parseFloat(totalPre) + infoProducto.precio;
-                    }
-                } else {
-                    carrito__footer.innerHTML = nuevoFooterCarrito;
-                }
+                carrito__footer.innerHTML = nuevoFooterCarrito;
             } else {
                 console.log("error");
             }
