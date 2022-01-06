@@ -91,7 +91,20 @@
                         </c:choose>
                     </div>
                     <div class="carrito__footer" id="carrito__footer">
-
+                        <c:if test="${sessionScope.cantidadProductosCarrito!=null && sessionScope.totalCarrito!=null}">
+                            <div class="container__total__unidades">
+                                <p>Unidades:</p>
+                                <p id="total__productos"><c:out value="${cantidadProductosCarrito}"/></p>
+                            </div>
+                            <div class="container__total">
+                                <p>Total: </p>
+                                <p id="total__carrito"><fmt:formatNumber type="currency" minFractionDigits="2"  value="${totalCarrito}"/></p>
+                            </div>
+                            <form action="FinalizarCarrito" method="POST" class="acciones__carrito">
+                                <button name="accionCarrito" value="eliminar" class="accion__carrito"><span class="material-icons ">delete</span></button>
+                                <button name="accionCarrito" value="pagar" class="accion__carrito">REALIZAR COMPRA</button>
+                            </form>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -116,10 +129,12 @@
             <!-- 
                 FIN MODALES 
             -->
-            <a href="#" class="container__logo">
-                <img src="IMAGENES/APP/logo_clico.png" alt="Pixer" class="halfclick__logo">
-                <h1 class="pixer__title">ClickByte.es</h1>
-            </a>
+            <form action="FrontController" method="POST" class="container__logo">
+                <button name="accion" value="producto.jsp">
+                    <img src="IMAGENES/APP/logo_clico.png" alt="Clickbyte" class="halfclick__logo">
+                    <h1 class="clickbyte__title">ClickByte.es</h1>
+                </button>
+            </form>
             <div class="container__nav">
                 <ul class="nav">
                     <li class="nav__item">
@@ -192,7 +207,7 @@
                     <h2>Categorías más relevantes</h2>
                 </div>
                 <form class="categorias__relevantes__body" action="CategoriaController" method="POST">
-                    <c:forEach var="categoriaRelevante" items="${listaCategoriasRelevantes}">
+                    <c:forEach var="categoriaRelevante" items="${sessionScope.listaCategoriasRelevantes}">
                         <button class="categoria" value="${categoriaRelevante.idCategoria}" name="categoria">
                             <div class="container__categoria__img">
                                 <img src="IMAGENES/APP/categorias/${categoriaRelevante.direccionImagen}" class="categoria__img">
@@ -207,7 +222,7 @@
                     <h2>Últimos portátiles</h2>
                 </div>
                 <form class="productos__body" action="ProductoController" method ="POST">
-                    <c:forEach var="portatil" items="${listaPortatiles}">
+                    <c:forEach var="portatil" items="${sessionScope.listaPortatiles}">
                         <div class="producto" id="portatiles">
                             <div class="container__productos__img">
                                 <img src="IMAGENES/APP/productos/${portatil.direccionImagen}.jpg" class="productos__img">

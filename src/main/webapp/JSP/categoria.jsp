@@ -63,35 +63,48 @@
                     <span class="material-icons" id="close__carrito">close</span>
                 </div>
                 <div class="carrito__body" id="carrito__body">
-                        <c:choose>
-                            <c:when test="${sessionScope.listaProductosCarrito!=null}">
-                                <c:forEach var="productoCarrito" items="${listaProductosCarrito}">
-                                    <div class="container__producto__carrito" data-idProducto="${productoCarrito.idProducto}">
-                                        <div class="container__producto__carrito__img">
-                                            <img src="IMAGENES/APP/productos/${productoCarrito.direccionImagen}.jpg" class="producto__carrito__img">
-                                        </div>
-                                        <div class="descripcion__producto__carrito">
-                                            <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
-                                            <div class="container__producto__carrito__unidades">
-                                                <p>Unidades:</p>
-                                                <div class="producto__carrito__unidades">
-                                                    <span class="material-icons">remove</span>
-                                                    <span class="unidades"><c:out value="${productoCarrito.cantidad}" /></span>
-                                                    <span class="material-icons">add</span>
-                                                </div>
-                                            </div>
-                                            <p class="producto__carrito__precio"><fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
-                                        </div>
+                    <c:choose>
+                        <c:when test="${sessionScope.listaProductosCarrito!=null}">
+                            <c:forEach var="productoCarrito" items="${listaProductosCarrito}">
+                                <div class="container__producto__carrito" data-idProducto="${productoCarrito.idProducto}">
+                                    <div class="container__producto__carrito__img">
+                                        <img src="IMAGENES/APP/productos/${productoCarrito.direccionImagen}.jpg" class="producto__carrito__img">
                                     </div>
-                                </c:forEach>
-                            </c:when>
-                            <c:when test="${sessionScope.listaProductosCarrito==null}">
-                                <h2>El carrito está vacío</h2>
-                            </c:when>
-                        </c:choose>
-                    </div>
-                <div class="carrito__footer">
-
+                                    <div class="descripcion__producto__carrito">
+                                        <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
+                                        <div class="container__producto__carrito__unidades">
+                                            <p>Unidades:</p>
+                                            <div class="producto__carrito__unidades">
+                                                <span class="material-icons">remove</span>
+                                                <span class="unidades"><c:out value="${productoCarrito.cantidad}" /></span>
+                                                <span class="material-icons">add</span>
+                                            </div>
+                                        </div>
+                                        <p class="producto__carrito__precio"><fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:when test="${sessionScope.listaProductosCarrito==null}">
+                            <h2>El carrito está vacío</h2>
+                        </c:when>
+                    </c:choose>
+                </div>
+                <div class="carrito__footer" id="carrito__footer">
+                    <c:if test="${sessionScope.cantidadProductosCarrito!=null && sessionScope.totalCarrito!=null}">
+                        <div class="container__total__unidades">
+                            <p>Unidades:</p>
+                            <p id="total__productos"><c:out value="${cantidadProductosCarrito}"/></p>
+                        </div>
+                        <div class="container__total">
+                            <p>Total: </p>
+                            <p id="total__carrito"><fmt:formatNumber type="currency" minFractionDigits="2"  value="${totalCarrito}"/></p>
+                        </div>
+                        <form action="FinalizarCarrito" method="POST" class="acciones__carrito">
+                            <button name="accionCarrito" value="eliminar" class="accion__carrito"><span class="material-icons ">delete</span></button>
+                            <button name="accionCarrito" value="pagar" class="accion__carrito">REALIZAR COMPRA</button>
+                        </form>
+                    </c:if>
                 </div>
             </div>
         </div>
@@ -116,10 +129,12 @@
         <!-- 
             FIN MODALES 
         -->
-        <a href="FrontController" class="container__logo">
-            <img src="IMAGENES/APP/logo_clico.png" alt="Pixer" class="halfclick__logo">
-            <h1 class="pixer__title">ClickByte.es</h1>
-        </a>
+        <form action="FrontController" method="POST" class="container__logo">
+            <button name="accion" value="producto.jsp">
+                <img src="IMAGENES/APP/logo_clico.png" alt="Clickbyte" class="halfclick__logo">
+                <h1 class="clickbyte__title">ClickByte.es</h1>
+            </button>
+        </form>
         <div class="container__nav">
             <ul class="nav">
                 <li class="nav__item">

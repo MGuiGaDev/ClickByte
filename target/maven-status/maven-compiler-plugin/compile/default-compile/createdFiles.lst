@@ -15,6 +15,7 @@ es\albarregas\models\UtilidadesProducto.class
 es\albarregas\beans\Producto.class
 es\albarregas\controllers\CogerFotoUsuario.class
 es\albarregas\controllers\GestionarCarrito.class
+es\albarregas\controllers\FinalizarCarrito.class
 es\albarregas\DAOFactory\MysqlDAOFactory.class
 es\albarregas\models\UtilidadesCategoria.class
 es\albarregas\DAO\CategoriaDAO.class

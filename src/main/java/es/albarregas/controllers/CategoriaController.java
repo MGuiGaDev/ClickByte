@@ -69,7 +69,7 @@ public class CategoriaController extends HttpServlet {
             if (!listaProductosIdCategoria.isEmpty()) {
                 request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
             }
-         
+
             cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
             if (!cookieAnonimo.getValue().equals("")) {
                 String[] datosCookie = cookieAnonimo.getValue().split("#");
@@ -83,11 +83,13 @@ public class CategoriaController extends HttpServlet {
                 if (!listaProductosCarrito.isEmpty()) {
                     listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(listaProductos, listaProductosCarrito);
                     int cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
+                    double totalCarrito = UtilidadesProducto.calcularTotal(listaProductosCarrito);
                     request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
                     request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
+                    request.getSession().setAttribute("totalCarrito", totalCarrito);
                 }
             }
-            
+
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

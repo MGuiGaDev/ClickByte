@@ -63,12 +63,18 @@ header{
     padding: 10px;
     gap: .5rem;
 }
-.pixer__title {
+.container__logo button {
+    cursor: pointer;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    background: transparent;
+}
+.clickbyte__title {
     font-size: 40px;
     font-weight: 900;
     letter-spacing: 2px;
     color: var(--c-primary);
-
 }
 .halfclick__logo {
     border-radius: 50%;
@@ -348,4 +354,10 @@ main {
 }
 .categoria__img{
     width: 160px;
+}
+.btn__vista__producto{
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
 }
