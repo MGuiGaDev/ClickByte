@@ -19,6 +19,7 @@ let anterior;
 let show;
 let crear;
 
+let file__avatar;
 
 const regexSoloLetras = /^[A-Z]+$/i;
 
@@ -58,12 +59,48 @@ function asignarEventos() {
     siguiente.addEventListener("click", function (evento) {
         avanzar(evento);
     });
+    
     anterior = document.getElementById("anterior");
     anterior.addEventListener("click", function (evento) {
         retroceder(evento);
     });
-}
+    
+    file__avatar = document.getElementById("file__avatar");
+    /*QUITAR COMENTARIO
+    file__avatar.addEventListener("change", previsualizarImagen);*/
 
+    
+    file__avatar.onchange = (function () {
+        readURL(this);
+    });
+
+
+
+
+    //avatar.addEventListener("change", previsualizarImagen(avatar));
+}
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("avatar__img").setAttribute("src", e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+}
+/*function previsualizarImagen(avatar) {
+    console.log(avatar.files)
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+        document.getElementById("avatar__img").setAttribute("src", e.result);
+    }
+
+}*/
+/*
+document.addEventListener('DOMContentLoaded', function(){
+    document.querySelector('#obtener').addEventListener('click', lanzarPeticion);
+});*/
 function mostrarPassword() {
     if (show.checked) {
         password.setAttribute("type", "text");
@@ -284,10 +321,14 @@ function validarSiguiente(paso) {
 
 function avanzar(evento) {
     evento.preventDefault();
+    let coleccionInputPersonal = [];
+    let inputErroneo;
     switch (true) {
         case personal.classList.contains("activo"):
             if (!validarSiguiente(personal)) {
-                console.log(validarSiguiente(personal));
+                coleccionInputPersonal = Array.from(personal.querySelectorAll(".form__group"));
+                inputErroneo = coleccionInputPersonal.find(element => element.querySelector("input").value === "" || element.querySelector("p").style.color ==="red");
+                inputErroneo.querySelector("input").focus();
             } else {
                 personal.classList.remove("activo");
                 shipping.classList.add("activo");
@@ -297,7 +338,9 @@ function avanzar(evento) {
             break;
         case shipping.classList.contains("activo"):
             if (!validarSiguiente(shipping)) {
-                console.log(validarSiguiente(shipping));
+                coleccionInputPersonal = Array.from(personal.querySelectorAll(".form__group"));
+                inputErroneo = coleccionInputPersonal.find(element => element.querySelector("input").value === "" || element.querySelector("p").style.color ==="red");
+                inputErroneo.querySelector("input").focus();
             } else {
                 shipping.classList.remove("activo");
                 profile.classList.add("activo");
@@ -305,7 +348,9 @@ function avanzar(evento) {
             break;
         case profile.classList.contains("activo"):
             if (!validarSiguiente(profile)) {
-                console.log(validarSiguiente(profile));
+                coleccionInputPersonal = Array.from(personal.querySelectorAll(".form__group"));
+                inputErroneo = coleccionInputPersonal.find(element => element.querySelector("input").value === "" || element.querySelector("p").style.color ==="red");
+                inputErroneo.querySelector("input").focus();
             } else {
                 profile.classList.remove("activo");
                 avatar.classList.add("activo");

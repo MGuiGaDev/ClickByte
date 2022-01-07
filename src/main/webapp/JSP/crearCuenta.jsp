@@ -71,7 +71,7 @@
                         </div>
                         <div class="form__group">
                             <label for="cp" class="label">Código Postal*</label>
-                            <input type="number" class="inputText" id="cp" name="cp" placeholder="Ej: 06300">
+                            <input type="number" class="inputText" id="cp" name="codigoPostal" placeholder="Ej: 06300">
                             <p class="input__msg">Debe contener un mínimo de 5 caracteres</p>
                         </div>
                         <div class="form__group">
@@ -124,10 +124,10 @@
                         <h2>Avatar</h2>
                     </div>
                     <div class="data__body">
-                        <div class="form__group">
-                            <input type="file" class="inputText file__avatar" id="imagenAvatar" name="imagenAvatar">
+                        <div class="form__group group__avatar">
+                            <input type="file" class="inputText file__avatar" id="file__avatar" name="avatar">
                             <div class="avatar__previous">
-                                <img src="../IMAGENES/APP/default.png" alt="Avatar usuario" class="avatar__img" id="avatar__img">
+                                <img src="../IMAGENES/AVATARES/default.png" alt="Avatar usuario" class="avatar__img" id="avatar__img">
                             </div>
                         </div>
                     </div>

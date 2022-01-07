@@ -25,17 +25,17 @@ public class Usuario implements Serializable{
     private String localidad;
     private String provincia;
     private String password;
-    //private Date ultimoAcceso;
+    private Date ultimoAcceso;
     private String avatar;
-    private byte[] imagenAvatar;
-    
+    //private byte[] imagenAvatar;
+    /*
     public byte[] getImagenAvatar() {
         return imagenAvatar;
     }
 
     public void setImagenAvatar(byte[] imagenAvatar) {
         this.imagenAvatar = imagenAvatar;
-    }
+    }*/
 /*
     public byte getIdUsuario() {
         return idUsuario;
@@ -124,7 +124,7 @@ public class Usuario implements Serializable{
     public void setProvincia(String provincia) {
         this.provincia = provincia;
     }
-/*
+
     public Date getUltimoAcceso() {
         return ultimoAcceso;
     }
@@ -132,7 +132,7 @@ public class Usuario implements Serializable{
     public void setUltimoAcceso(Date ultimoAcceso) {
         this.ultimoAcceso = ultimoAcceso;
     }
-*/
+
     public String getAvatar() {
         return avatar;
     }

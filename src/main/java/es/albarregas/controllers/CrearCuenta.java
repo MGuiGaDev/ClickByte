@@ -67,7 +67,7 @@ public class CrearCuenta extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String url = "FrontController";
 
         Usuario usuario = new Usuario();
@@ -113,19 +113,19 @@ public class CrearCuenta extends HttpServlet {
                         case "apellidos":
 
                         case "dni":
-                        
+
                         case "telefono":
-                        
+
                         case "direccion":
-                            
+
                         case "cp":
-                        
+
                         case "localidad":
-                        
+
                         case "provincia":
-                        
+
                         case "email":
-                        
+
                         case "password":
                             if (valor.equals("")) {
                                 error = true;
@@ -138,7 +138,7 @@ public class CrearCuenta extends HttpServlet {
             if (!cancelar) {
                 // En el caso de que no se haya pulsado Cancelar comprobamos que no haya algún campo vacío
                 if (!error) {
-                    
+
                     Iterator<FileItem> itDos = items.iterator();
 
                     while (itDos.hasNext()) {
@@ -184,9 +184,10 @@ public class CrearCuenta extends HttpServlet {
                             }
                         }
                     }
-                }//fin error
-                
-                
+                }
+
+//fin error
+
                 /*if (!error) {
                 DateConverter converter = new DateConverter();
                 converter.setPattern("yyyy-MM-dd");
@@ -223,6 +224,21 @@ public class CrearCuenta extends HttpServlet {
             } //FIN CANCELAR
         } catch (FileUploadException ex) {
             Logger.getLogger(CrearCuenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (!error) {
+            
+            try {
+                /*DateConverter converter = new DateConverter();
+                converter.setPattern("yyyy-MM-dd");
+                ConvertUtils.register(converter, Date.class);*/
+                BeanUtils.populate(usuario, request.getParameterMap());
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(CrearCuenta.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(CrearCuenta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
 
         request.getRequestDispatcher(url).forward(request, response);
