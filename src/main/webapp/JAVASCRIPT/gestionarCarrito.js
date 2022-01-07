@@ -81,9 +81,9 @@ function operarUnidadesProducto(evento) {
                             span.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
                             break;
                         case "delete":
-                            console.log(carrito__body.childElementCount);
+                            
                             if (carrito__body.childElementCount > 1) {
-                                span.parentElement.parentElement.parentElement.parentElement.remove();
+                                span.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
                             }
                             break;
                     }

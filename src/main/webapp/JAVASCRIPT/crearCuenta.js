@@ -340,38 +340,16 @@ function avanzar(evento) {
                 avatar.classList.add("activo");
                 crear.removeAttribute("hidden");
                 siguiente.setAttribute("hidden", true);
-                let totalInputs = Array.from(document.querySelectorAll("input"));
-                let inputs = totalInputs.filter(element => element.id!=="confirm" && element.id!=="show" && element.id !=="file__avatar");
-                recogerDatosUsuario(inputs)
-                
+                /*
+                 * POR SI DEBIERA CARGAR DATOS USUARIO EN TERCER PASO
+                 * let totalInputs = Array.from(document.querySelectorAll("input"));
+                 * let inputs = totalInputs.filter(element => element.id!=="confirm" && element.id!=="show" && element.id !=="file__avatar");
+                 */
             }
             break;
     }
 }
-function recogerDatosUsuario(coleccionInputs) {
-    console.log(coleccionInputs);/*
-    $.ajax({
-            type: 'POST',
-            url: url,
-            data: {
-                accion: accion,
-                id: idProducto
-            },
-            success: function (data) {
 
-                if (data.tipo === 'success') {
-                    
-                } else {
-                    console.log("error succes");
-                }
-
-            },
-            error: function () {
-                console.log("error post");
-            }
-        });
-        ;*/
-}
 function retroceder(evento) {
     evento.preventDefault();
     switch (true) {
