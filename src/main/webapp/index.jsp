@@ -83,7 +83,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="container__producto__carrito__unidades delete__unidad">
-                                                    <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">delete</span>
+                                                    <div>
+                                                        <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">delete</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <br>

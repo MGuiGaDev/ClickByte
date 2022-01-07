@@ -30,7 +30,6 @@ function asignarEventos() {
 }
 
 function operarUnidadesProducto(evento) {
-    console.log(carrito__body.childElementCount);
     if (evento.target.tagName === "SPAN") {
         let span = evento.target;
         let accion = span.innerText;
@@ -152,13 +151,13 @@ function nuevoProductoCarrito(idProducto) {
                                                                 <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>add</span>\n\
                                                             </div>\n\
                                                         </div>\n\
-                                                        <div class='container__producto__carrito__unidades delete__unidad'>\n\
+                                                        <div class='container__producto__carrito__unidades delete__unidad'><div>\n\
                                                             <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>delete</span>\n\
-                                                        </div>\n\
+                                                        </div></div>\n\
                                                     </div>\n\
-                                                <br>\n\
-                                                <p class='producto__carrito__precio'>Importe unidad: " + infoProducto.precio + ",00 &euro;</p>\n\
-                                                <p class='producto__carrito__precio'>Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 &euro;</p>\n\
+                                                    <br>\n\
+                                                    <p class='producto__carrito__precio'>Importe unidad: " + infoProducto.precio + ",00 &euro;</p>\n\
+                                                    <p class='producto__carrito__precio'>Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 &euro;</p>\n\
                                                 </div>\n\
                                             </div>";
                 let nuevoFooterCarrito = "<div class='container__total__unidades'>\n\
@@ -182,7 +181,7 @@ function nuevoProductoCarrito(idProducto) {
                     if (productoActualizado) {
                         productoActualizado.querySelector(".unidades").innerText = parseInt(productoActualizado.querySelector(".unidades").innerText) + 1;
                         count__producto.innerText = parseInt(count__producto.innerText) + 1;
-                        span.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
+                        productoActualizado.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
                     } else {
                         carrito__body.innerHTML += nuevoProducto;
                         count__producto.innerText = parseInt(count__producto.innerText) + 1;
