@@ -47,9 +47,9 @@ function asignarEventos() {
      * REALIZAR:
      * [o] Validación nombre
      * [o] Validación apellido
-     * [x] Validación DNI
+     * [o] Validación DNI
      * [o] Validación email
-     * [x] Validación teléfono
+     * [o] Validación teléfono
      * [x] Validación dirección
      * [x] Validación código postal
      * [x] Validación Localidad
@@ -132,21 +132,6 @@ function validarConfirm(){
         console.log("las contraseñas son iguales");
     }
 }
-/*
-function globalColorFocus(evento) {
-    if (evento.target = "INPUT" && !evento.target.files) {
-        let input = evento.target;
-        if (input.value != "") {
-            if (input.type == "email") {
-                comprobarEmail(input.value);
-            } else {
-                input.parentElement.style = "border: 2px solid var(--color-title);";
-                input.nextElementSibling.classList.add("label__floating");
-            }
-        }
-
-    }
-}*/
 function comprobarEmail() {
     let value = email.value;
     console.log(value);
@@ -241,18 +226,3 @@ function readURL(input) {
     }
 }
 
-/*NO ME FUNCIONA...
- function previsualizarImagen(avatar) {
- console.log(avatar.files)
- let reader = new FileReader();
- 
- reader.onload = function (e) {
- document.querySelector(".avatar__previous > img").setAttribute("src", e.result);
- }
- 
- }
- */
-/*
- document.addEventListener('DOMContentLoaded', function(){
- document.querySelector('#obtener').addEventListener('click', lanzarPeticion);
- });*/

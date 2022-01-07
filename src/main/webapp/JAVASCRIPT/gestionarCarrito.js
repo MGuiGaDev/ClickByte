@@ -11,7 +11,6 @@ let carrito__footer;
 
 let container__productos;
 
-
 document.addEventListener("DOMContentLoaded", asignarEventos);
 function asignarEventos() {
 
@@ -56,6 +55,7 @@ function operarUnidadesProducto(evento) {
                 if (data.tipo === 'success') {
                     let infoProducto = {
                         cantidad: data.cantidad,
+                        precio: data.precio,
                         cantidadTotal: data.cantidadTotal,
                         total: data.total
                     };
@@ -78,14 +78,16 @@ function operarUnidadesProducto(evento) {
                         case "add":
                         case "remove":
                             span.parentElement.querySelector(".unidades").innerText = infoProducto.cantidad;
+                            span.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
                             break;
                         case "delete":
                             console.log(carrito__body.childElementCount);
                             if (carrito__body.childElementCount > 1) {
                                 span.parentElement.parentElement.parentElement.parentElement.remove();
-                            } 
+                            }
                             break;
                     }
+
                     count__producto.innerText = infoProducto.cantidadTotal;
                     carrito__footer.innerHTML = nuevoFooterCarrito;
                 } else if (data.tipo === 'vacio') {
@@ -140,6 +142,7 @@ function nuevoProductoCarrito(idProducto) {
                                                 </div>\n\
                                                 <div class='descripcion__producto__carrito'>\n\
                                                     <p class='producto__carrito__nombre'>" + infoProducto.nombre + "</p>\n\
+                                                    <br>\n\
                                                     <div class='gestion__unidad'>    \n\
                                                         <div class='container__producto__carrito__unidades'>\n\
                                                             <p> Unidades: </p>\n\
@@ -153,7 +156,9 @@ function nuevoProductoCarrito(idProducto) {
                                                             <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>delete</span>\n\
                                                         </div>\n\
                                                     </div>\n\
-                                                <p class='producto__carrito__precio'>" + infoProducto.precio + ",00 &euro;</p>\n\
+                                                <br>\n\
+                                                <p class='producto__carrito__precio'>Importe unidad: " + infoProducto.precio + ",00 &euro;</p>\n\
+                                                <p class='producto__carrito__precio'>Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 &euro;</p>\n\
                                                 </div>\n\
                                             </div>";
                 let nuevoFooterCarrito = "<div class='container__total__unidades'>\n\
@@ -177,6 +182,7 @@ function nuevoProductoCarrito(idProducto) {
                     if (productoActualizado) {
                         productoActualizado.querySelector(".unidades").innerText = parseInt(productoActualizado.querySelector(".unidades").innerText) + 1;
                         count__producto.innerText = parseInt(count__producto.innerText) + 1;
+                        span.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
                     } else {
                         carrito__body.innerHTML += nuevoProducto;
                         count__producto.innerText = parseInt(count__producto.innerText) + 1;

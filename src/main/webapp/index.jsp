@@ -72,6 +72,7 @@
                                         </div>
                                         <div class="descripcion__producto__carrito">
                                             <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
+                                            <br>
                                             <div class="gestion__unidad">
                                                 <div class="container__producto__carrito__unidades">
                                                     <p>Unidades:</p>
@@ -85,7 +86,9 @@
                                                     <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">delete</span>
                                                 </div>
                                             </div>
-                                            <p class="producto__carrito__precio"><fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
+                                            <br>
+                                            <p class="producto__carrito__precio">Importe unidad: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
+                                            <p class="producto__carrito__precio">Importe total: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio*productoCarrito.cantidad}" /></p>
                                         </div>
                                     </div>
                                 </c:forEach>
