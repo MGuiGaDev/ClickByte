@@ -97,10 +97,30 @@ Mi carrito
     border-bottom: 1px solid lightgrey;
     padding-top: .5rem;
 }
-
+.gestion__unidad {
+    display: flex;
+    flex-direction: row;
+}
 .container__producto__carrito__unidades {
     display: flex;
     flex-direction: column;
+    width: 50%;
+}
+.delete__unidad {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.delete__unidad span {
+    cursor: pointer;
+    background: var(--c-secondary);
+    color: var(--c-primary);
+    transition: .4s;
+    padding: .3rem;
+    border-radius: 5px;
+}
+.delete__unidad span:hover{
+    background: var(--c-primary);
+    color: white;
 }
 .producto__carrito__unidades {
     display: flex;
@@ -147,6 +167,7 @@ Mi carrito
     background: var(--c-secondary);
     color: var(--c-primary);
     transition: .4s;
+     border-radius: 5px;
 }
 .accion__carrito:hover{
     background: var(--c-primary);

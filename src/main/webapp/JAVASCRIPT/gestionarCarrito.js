@@ -18,6 +18,9 @@ function asignarEventos() {
     count__producto = document.getElementById("count__producto");
 
     carrito__body = document.getElementById("carrito__body");
+    carrito__body.addEventListener("click", function (evento) {
+        operarUnidadesProducto(evento);
+    });
 
     container__productos = document.querySelector(".container__productos");
     carrito__footer = document.querySelector(".carrito__footer");
@@ -26,6 +29,81 @@ function asignarEventos() {
     });
 
 }
+
+function operarUnidadesProducto(evento) {
+    console.log(carrito__body.childElementCount);
+    if (evento.target.tagName === "SPAN") {
+        let span = evento.target;
+        let accion = span.innerText;
+        let idProducto = span.dataset.idproducto;
+        let url = "GestionarCarrito";
+        if (accion === "remove") {
+            if (span.parentElement.querySelector(".unidades").innerText === "1") {
+                accion = "delete";
+            }
+        }
+
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                accion: accion,
+                id: idProducto
+            },
+            success: function (data) {
+
+                if (data.tipo === 'success') {
+                    let infoProducto = {
+                        cantidad: data.cantidad,
+                        cantidadTotal: data.cantidadTotal,
+                        total: data.total
+                    };
+                    let nuevoFooterCarrito = "<div class='container__total__unidades'>\n\
+                                            <p>Unidades:</p>\n\
+                                            <p>" + infoProducto.cantidadTotal + "</p>\n\
+                                            </div>\n\
+                                            <div class='container__total'>\n\
+                                            <p>Total: </p>\n\
+                                            <p>" + infoProducto.total + ",00 &euro;</p>\n\
+                                            </div>\n\
+                                            <form action='FinalizarCarrito' method='POST' class='acciones__carrito'>\n\
+                                            <button name='accionCarrito' value='eliminar' class='accion__carrito'>\n\
+                                            <span class='material-icons'>delete</span>\n\
+                                            </button>\n\
+                                            <button name='accionCarrito' value='pagar' class='accion__carrito'>REALIZAR COMPRA</button>\n\
+                                            </form>\n\
+                                        </div>";
+                    switch (accion) {
+                        case "add":
+                        case "remove":
+                            span.parentElement.querySelector(".unidades").innerText = infoProducto.cantidad;
+                            break;
+                        case "delete":
+                            console.log(carrito__body.childElementCount);
+                            if (carrito__body.childElementCount > 1) {
+                                span.parentElement.parentElement.parentElement.parentElement.remove();
+                            } 
+                            break;
+                    }
+                    count__producto.innerText = infoProducto.cantidadTotal;
+                    carrito__footer.innerHTML = nuevoFooterCarrito;
+                } else if (data.tipo === 'vacio') {
+                    carrito__body.innerHTML = "<h2>El carrito est&aacute; vac&iacute;o</h2>";
+                    count__producto.innerText = "0";
+                    carrito__footer.innerHTML = "";
+                } else {
+                    console.log("error succes");
+                }
+
+            },
+            error: function () {
+                console.log("error post");
+            }
+        });
+        ;
+    }
+}
 function cargarCarritoConProducto(evento) {
     if (evento.target.tagName === "SPAN" && evento.target.id.length > 0) {
         let idProducto = evento.target.id;
@@ -33,9 +111,6 @@ function cargarCarritoConProducto(evento) {
         modal__carrito.classList.add("modal__carrito-activo");
         nuevoProductoCarrito(idProducto);
     }
-}
-function actualizarCarrito() {
-
 }
 function nuevoProductoCarrito(idProducto) {
     let value = idProducto;
@@ -65,14 +140,19 @@ function nuevoProductoCarrito(idProducto) {
                                                 </div>\n\
                                                 <div class='descripcion__producto__carrito'>\n\
                                                     <p class='producto__carrito__nombre'>" + infoProducto.nombre + "</p>\n\
-                                                <div class='container__producto__carrito__unidades'>\n\
-                                                    <p> Unidades: </p>\n\
-                                                    <div class='producto__carrito__unidades'>\n\
-                                                        <span class='material-icons'>remove</span>\n\
-                                                        <span class='unidades'>" + infoProducto.cantidad + "</span>\n\
-                                                        <span class='material-icons'>add</span>\n\
+                                                    <div class='gestion__unidad'>    \n\
+                                                        <div class='container__producto__carrito__unidades'>\n\
+                                                            <p> Unidades: </p>\n\
+                                                            <div class='producto__carrito__unidades'>\n\
+                                                                <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>remove</span>\n\
+                                                                <span class='unidades'>" + infoProducto.cantidad + "</span>\n\
+                                                                <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>add</span>\n\
+                                                            </div>\n\
+                                                        </div>\n\
+                                                        <div class='container__producto__carrito__unidades delete__unidad'>\n\
+                                                            <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>delete</span>\n\
+                                                        </div>\n\
                                                     </div>\n\
-                                                </div>\n\
                                                 <p class='producto__carrito__precio'>" + infoProducto.precio + ",00 &euro;</p>\n\
                                                 </div>\n\
                                             </div>";
@@ -91,7 +171,7 @@ function nuevoProductoCarrito(idProducto) {
                                             <button name='accionCarrito' value='pagar' class='accion__carrito'>REALIZAR COMPRA</button>\n\
                                             </form>\n\
                                         </div>";
-                if (carrito__body.innerHTML !== "<h2>El carrito está vacío</h2>") {
+                if (!carrito__body.querySelector("h2")) {
                     let productosCarrito = Array.from(carrito__body.children);
                     let productoActualizado = productosCarrito.find(element => element.dataset.idproducto === idProducto);
                     if (productoActualizado) {

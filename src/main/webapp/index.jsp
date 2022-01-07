@@ -72,12 +72,17 @@
                                         </div>
                                         <div class="descripcion__producto__carrito">
                                             <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
-                                            <div class="container__producto__carrito__unidades">
-                                                <p>Unidades:</p>
-                                                <div class="producto__carrito__unidades">
-                                                    <span class="material-icons">remove</span>
-                                                    <span class="unidades"><c:out value="${productoCarrito.cantidad}" /></span>
-                                                    <span class="material-icons">add</span>
+                                            <div class="gestion__unidad">
+                                                <div class="container__producto__carrito__unidades">
+                                                    <p>Unidades:</p>
+                                                    <div class="producto__carrito__unidades">
+                                                        <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">remove</span>
+                                                        <span class="unidades"><c:out value="${productoCarrito.cantidad}" /></span>
+                                                        <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">add</span>
+                                                    </div>
+                                                </div>
+                                                <div class="container__producto__carrito__unidades delete__unidad">
+                                                    <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">delete</span>
                                                 </div>
                                             </div>
                                             <p class="producto__carrito__precio"><fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
@@ -85,7 +90,7 @@
                                     </div>
                                 </c:forEach>
                             </c:when>
-                            <c:when test="${sessionScope.listaProductosCarrito.isEmpty()}">
+                            <c:when test="${sessionScope.listaProductosCarrito==null}">
                                 <h2>El carrito está vacío</h2>
                             </c:when>
                         </c:choose>

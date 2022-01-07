@@ -11,6 +11,7 @@ import es.albarregas.models.UtilidadesProducto;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -73,10 +74,10 @@ public class GestionarCarrito extends HttpServlet {
         int cantidadProductosCarrito = 0;
         double total = 0;
 
+        objeto = new JSONObject();
+        productoCarrito = new Producto();
         switch (accion) {
             case "nuevoProducto":
-                objeto = new JSONObject();
-                productoCarrito = new Producto();
                 if (request.getParameter("id") != null) {
                     String idProducto = request.getParameter("id");
                     if (!listaProductosCarrito.isEmpty()) {
@@ -104,34 +105,89 @@ public class GestionarCarrito extends HttpServlet {
                         }
                     }
 
-                    cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
-                    listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(listaProductos, listaProductosCarrito);
-                    total = UtilidadesProducto.calcularTotal(listaProductosCarrito);
-                    request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
-                    request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
-                    request.getSession().setAttribute("totalCarrito", total);
-                    cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito, cookieAnonimo);
-                    cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-                    response.addCookie(cookieAnonimo);
-
-                    if (!cookieAnonimo.getValue().equals("")) {
-
-                        objeto.put("tipo", "success");
-                        objeto.put("idProducto", productoCarrito.getIdProducto());
-                        objeto.put("imagen", productoCarrito.getDireccionImagen());
-                        objeto.put("nombre", productoCarrito.getNombre());
-                        objeto.put("cantidad", productoCarrito.getCantidad());
-                        objeto.put("precio", productoCarrito.getPrecio());
-                        objeto.put("cantidadTotal", cantidadProductosCarrito);
-                        objeto.put("total", total);
-
-                    } else {
-                        objeto.put("tipo", "error");
-                        objeto.put("email", "La cookie no ha sido creada.");
-                    }
-
                 }
                 break;
+            case "add":
+                objeto = new JSONObject();
+                productoCarrito = new Producto();
+                if (request.getParameter("id") != null) {
+                    String idProducto = request.getParameter("id");
+                    if (!listaProductosCarrito.isEmpty()) {
+                        for (Producto pro : listaProductosCarrito) {
+                            if (pro.getIdProducto() == Short.parseShort(idProducto)) {
+                                pro.setCantidad((short) (pro.getCantidad() + 1));
+                                productoCarrito = new Producto();
+                                productoCarrito = pro;
+                            }
+                        }
+                    }
+                }
+                break;
+            case "remove":
+                objeto = new JSONObject();
+                productoCarrito = new Producto();
+                if (request.getParameter("id") != null) {
+                    String idProducto = request.getParameter("id");
+                    if (!listaProductosCarrito.isEmpty()) {
+                        for (Producto pro : listaProductosCarrito) {
+                            if (pro.getIdProducto() == Short.parseShort(idProducto)) {
+                                pro.setCantidad((short) (pro.getCantidad() - 1));
+                                productoCarrito = new Producto();
+                                productoCarrito = pro;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case "delete":
+                objeto = new JSONObject();
+                productoCarrito = new Producto();
+                if (request.getParameter("id") != null) {
+                    String idProducto = request.getParameter("id");
+
+                    if (!listaProductosCarrito.isEmpty()) {
+                        Iterator<Producto> it = listaProductosCarrito.listIterator();
+                        while (it.hasNext()) {
+                            if (it.next().getIdProducto() == Short.parseShort(idProducto)) {
+                                it.remove();
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+
+        if (!listaProductosCarrito.isEmpty()) {
+            cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
+            listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(listaProductos, listaProductosCarrito);
+            total = UtilidadesProducto.calcularTotal(listaProductosCarrito);
+            request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
+            request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
+            request.getSession().setAttribute("totalCarrito", total);
+            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito, cookieAnonimo);
+            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
+            response.addCookie(cookieAnonimo);
+        } else {
+            request.getSession().removeAttribute("listaProductosCarrito");
+            request.getSession().removeAttribute("cantidadProductosCarrito");
+            request.getSession().removeAttribute("totalCarrito");
+            cookieAnonimo.setValue("");
+            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
+            response.addCookie(cookieAnonimo);
+        }
+
+        if (!listaProductosCarrito.isEmpty()) {
+            objeto.put("tipo", "success");
+            objeto.put("idProducto", productoCarrito.getIdProducto());
+            objeto.put("imagen", productoCarrito.getDireccionImagen());
+            objeto.put("nombre", productoCarrito.getNombre());
+            objeto.put("cantidad", productoCarrito.getCantidad());
+            objeto.put("precio", productoCarrito.getPrecio());
+            objeto.put("cantidadTotal", cantidadProductosCarrito);
+            objeto.put("total", total);
+        } else {
+            objeto.put("tipo", "vacio");
         }
         response.setContentType("application/json");
         response.getWriter().print(objeto);
