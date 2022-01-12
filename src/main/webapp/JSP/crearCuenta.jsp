@@ -20,7 +20,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
-        <form action="${contexto}/CrearCuenta" method="post" class="form" enctype="multipart/form-data">
+        <form action="${contexto}/CrearCuentaController" method="post" class="form" enctype="multipart/form-data">
             <div class="form__header">
                 <h1>CREAR CUENTA</h1>
             </div>
@@ -71,8 +71,8 @@
                         </div>
                         <div class="form__group">
                             <label for="cp" class="label">Código Postal*</label>
-                            <input type="number" class="inputText" id="cp" name="codigoPostal" placeholder="Ej: 06300">
-                            <p class="input__msg">Debe contener un mínimo de 5 caracteres</p>
+                            <input type="text" class="inputText" id="cp" name="codigoPostal" placeholder="Ej: 06300">
+                            <p class="input__msg">Debe contener un mínimo de 5 caracteres numéricos</p>
                         </div>
                         <div class="form__group">
                             <label for="localidad" class="label">Localidad*</label>
@@ -108,7 +108,7 @@
                             </p>
                         </div>
                         <div class="form__group">
-                            <label for="confirm" class="label">Confirmación*</label>
+                            <label for="confirm" class="label">Confirmaci&ntilde;n*</label>
                             <input type="password" class="inputText" id="confirm" placeholder="Ej: 123asd$=">
                             <p class="input__msg">*La contraseña y la confirmación deben ser iguales.
                             </p>
@@ -126,6 +126,10 @@
                     <div class="data__body">
                         <div class="form__group group__avatar">
                             <input type="file" class="inputText file__avatar" id="file__avatar" name="avatar">
+                            <div>
+                                <p id="formato">El formato permitido es png o jpg.</p>
+                                <p id="dimensiones">El tamaño de la imagen no puede superar los 1024x768 píxeles</p>
+                            </div>
                             <div class="avatar__previous">
                                 <img src="../IMAGENES/AVATARES/default.png" alt="Avatar usuario" class="avatar__img" id="avatar__img">
                             </div>
@@ -134,14 +138,14 @@
                 </div>
             </div>
             <div class="form__footer">
-                <button name="boton" value="cancelar">CANCELAR</button>
+                <button name="accion" value="cancelar">CANCELAR</button>
                 <button id="anterior" hidden>
                     <span class="material-icons">arrow_back</span>
                 </button>
                 <button id="siguiente">
                     <span class="material-icons">arrow_forward</span>
                 </button>
-                <button name="boton" value="crear" id="crear" class="crear" hidden>CREAR</button>
+                <button name="accion" value="crear" id="crear" class="crear" hidden>CREAR</button>
             </div>
         </form>
         <script><%@include file="../JAVASCRIPT/crearCuenta.js"%></script>

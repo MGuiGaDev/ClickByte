@@ -11,6 +11,10 @@ let carrito__footer;
 
 let container__productos;
 
+let eliminar__carrito;
+
+let container__resultado__busqueda;
+
 document.addEventListener("DOMContentLoaded", asignarEventos);
 function asignarEventos() {
 
@@ -27,6 +31,10 @@ function asignarEventos() {
         cargarCarritoConProducto(evento);
     });
 
+
+    carrito__footer.addEventListener("click", function (evento) {
+        eliminarCarrito(evento);
+    });
 }
 
 function operarUnidadesProducto(evento) {
@@ -34,14 +42,12 @@ function operarUnidadesProducto(evento) {
         let span = evento.target;
         let accion = span.innerText;
         let idProducto = span.dataset.idproducto;
-        let url = "GestionarCarrito";
+        let url = "AjaxGestionarCarritoController";
         if (accion === "remove") {
             if (span.parentElement.querySelector(".unidades").innerText === "1") {
-                accion = "delete";
+                accion = "clear";
             }
         }
-
-
         $.ajax({
             type: 'POST',
             url: url,
@@ -66,10 +72,8 @@ function operarUnidadesProducto(evento) {
                                             <p>Total: </p>\n\
                                             <p>" + infoProducto.total + ",00 &euro;</p>\n\
                                             </div>\n\
-                                            <form action='FinalizarCarrito' method='POST' class='acciones__carrito'>\n\
-                                            <button name='accionCarrito' value='eliminar' class='accion__carrito'>\n\
-                                            <span class='material-icons'>delete</span>\n\
-                                            </button>\n\
+                                            <form action='FinalizarCarritoController' method='POST' class='acciones__carrito'>\n\
+                                            <span class='material-icons accion__carrito' id='eliminar__carrito'>delete</span>\n\
                                             <button name='accionCarrito' value='pagar' class='accion__carrito'>REALIZAR COMPRA</button>\n\
                                             </form>\n\
                                         </div>";
@@ -79,8 +83,7 @@ function operarUnidadesProducto(evento) {
                             span.parentElement.querySelector(".unidades").innerText = infoProducto.cantidad;
                             span.parentElement.parentElement.parentElement.parentElement.querySelectorAll(".producto__carrito__precio")[1].innerText = "Importe total: " + infoProducto.precio * infoProducto.cantidad + ",00 \u20AC";
                             break;
-                        case "delete":
-                            
+                        case "clear":
                             if (carrito__body.childElementCount > 1) {
                                 span.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
                             }
@@ -105,6 +108,35 @@ function operarUnidadesProducto(evento) {
         ;
     }
 }
+function eliminarCarrito(evento) {
+    if (evento.target.id === "eliminar__carrito") {
+        eliminar__carrito = evento.target;
+        let accion = eliminar__carrito.innerText;
+        let url = "AjaxGestionarCarritoController";
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                accion: accion
+            },
+            success: function (data) {
+                if (data.tipo === 'vacio') {
+                    carrito__body.innerHTML = "<h2>El carrito est&aacute; vac&iacute;o</h2>";
+                    count__producto.innerText = "0";
+                    carrito__footer.innerHTML = "";
+                } else {
+                    console.log("error succes");
+                }
+
+            },
+            error: function () {
+                console.log("error post");
+            }
+        });
+        ;
+    }
+}
+
 function cargarCarritoConProducto(evento) {
     if (evento.target.tagName === "SPAN" && evento.target.id.length > 0) {
         let idProducto = evento.target.id;
@@ -115,7 +147,7 @@ function cargarCarritoConProducto(evento) {
 }
 function nuevoProductoCarrito(idProducto) {
     let value = idProducto;
-    let url = "GestionarCarrito";
+    let url = "AjaxGestionarCarritoController";
     $.ajax({
         type: 'POST',
         url: url,
@@ -152,7 +184,7 @@ function nuevoProductoCarrito(idProducto) {
                                                             </div>\n\
                                                         </div>\n\
                                                         <div class='container__producto__carrito__unidades delete__unidad'><div>\n\
-                                                            <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>delete</span>\n\
+                                                            <span class='material-icons' data-idProducto='" + infoProducto.idProducto + "'>clear</span>\n\
                                                         </div></div>\n\
                                                     </div>\n\
                                                     <br>\n\
@@ -168,10 +200,8 @@ function nuevoProductoCarrito(idProducto) {
                                             <p>Total: </p>\n\
                                             <p>" + infoProducto.total + ",00 &euro;</p>\n\
                                             </div>\n\
-                                            <form action='FinalizarCarrito' method='POST' class='acciones__carrito'>\n\
-                                            <button name='accionCarrito' value='eliminar' class='accion__carrito'>\n\
-                                            <span class='material-icons'>delete</span>\n\
-                                            </button>\n\
+                                            <form action='FinalizarCarritoController' method='POST' class='acciones__carrito'>\n\
+                                            <span class='material-icons accion__carrito' id='eliminar__carrito'>delete</span>\n\
                                             <button name='accionCarrito' value='pagar' class='accion__carrito'>REALIZAR COMPRA</button>\n\
                                             </form>\n\
                                         </div>";

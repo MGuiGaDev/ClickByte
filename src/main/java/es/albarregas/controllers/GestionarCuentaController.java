@@ -5,10 +5,8 @@
  */
 package es.albarregas.controllers;
 
-import es.albarregas.beans.Producto;
-import es.albarregas.models.UtilidadesProducto;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Manuel Guillén Gallardo
  */
-@WebServlet(name = "CategoriaController", urlPatterns = {"/CategoriaController"})
-public class CategoriaController extends HttpServlet {
+@WebServlet(name = "GestionarCuentaController", urlPatterns = {"/GestionarCuentaController"})
+public class GestionarCuentaController extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -47,20 +45,9 @@ public class CategoriaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "JSP/categoria.jsp";
-        ArrayList<Producto> listaProductos = new ArrayList<>();
-        ArrayList<Producto> listaProductosIdCategoria = new ArrayList<>();
-        if (request.getParameter("categoria") != null) {
-            String idCategoria = request.getParameter("categoria");
-            if (request.getParameter("nombreCategoria") != null) {
-                String nombreCategoria = request.getParameter("nombreCategoria");
-                request.setAttribute("nombreCategoria", nombreCategoria);
-            }
-            listaProductos = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
-            listaProductosIdCategoria = UtilidadesProducto.filtrarProductosPorIdCategoria(listaProductos, idCategoria);
-            if (!listaProductosIdCategoria.isEmpty()) {
-                request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
-            }
+        String url = "JSP/usuario.jsp";
+        if(request.getSession().getAttribute("usuario")== null) {
+            url="JSP/index.jsp";
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

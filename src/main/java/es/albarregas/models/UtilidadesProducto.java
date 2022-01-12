@@ -15,6 +15,33 @@ import java.util.ArrayList;
  */
 public class UtilidadesProducto implements Serializable {
 
+    public static ArrayList<Producto> buscarProductos(ArrayList<Producto> listaProductos, String valorBuscado) {
+        ArrayList<Producto> listaProductosBuscados = new ArrayList<>();
+        String[] valoresBuscados = null;
+        if (valorBuscado.contains(" ")) {
+            valoresBuscados = valorBuscado.split(" ");
+        } else {
+            valoresBuscados = new String[1];
+            valoresBuscados[0] = valorBuscado;
+        }
+        if (valoresBuscados != null) {
+            for (Producto p : listaProductos) {
+                for (int i = 0; i < valoresBuscados.length; i++) {
+                    if (p.getDescripcion().toUpperCase().contains(valoresBuscados[i].toUpperCase())
+                            || p.getNombre().toUpperCase().contains(valoresBuscados[i].toUpperCase())
+                            || String.valueOf(p.getPrecio()).equals(valoresBuscados[i])) {
+                        if (listaProductosBuscados.isEmpty()) {
+                            listaProductosBuscados.add(p);
+                        } else if (!listaProductosBuscados.contains(p)) {
+                            listaProductosBuscados.add(p);
+                        }
+                    }
+                }
+            }
+        }
+        return listaProductosBuscados;
+    }
+
     public static ArrayList<Producto> filtrarPortatiles(ArrayList<Producto> listaProductos) {
         ArrayList<Producto> listaPortatiles = new ArrayList<>();
         if (!listaProductos.isEmpty()) {
@@ -101,5 +128,31 @@ public class UtilidadesProducto implements Serializable {
             }
         }
         return total;
+    }
+
+    public static ArrayList<String> filtroPorMarca(ArrayList<Producto> listaProductos) {
+        ArrayList<String> marcas = new ArrayList<>();
+        if (!listaProductos.isEmpty()) {
+            for (Producto p : listaProductos) {
+                if (marcas.isEmpty()) {
+                    marcas.add(p.getMarca());
+                } else {
+                    if (!marcas.contains(p.getMarca())) {
+                        marcas.add(p.getMarca());
+                    }
+                }
+            }
+        }
+        return marcas;
+    }
+
+    public static double filtroPrecioMasAlto(ArrayList<Producto> listaProductos) {
+        double precioMasAlto = 0;
+        if (!listaProductos.isEmpty()) {
+            for (Producto p : listaProductos) {
+                precioMasAlto = p.getPrecio()>precioMasAlto? p.getPrecio():precioMasAlto;
+            }
+        }
+        return precioMasAlto;
     }
 }

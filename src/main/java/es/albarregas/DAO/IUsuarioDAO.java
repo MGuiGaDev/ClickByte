@@ -14,7 +14,11 @@ import java.sql.Connection;
  */
 public interface IUsuarioDAO {
     
-    public Usuario comprobarEmail(String email);
+    public Usuario comprobarEmail(Usuario usuario);
     public void closeConnection(Connection conexion);
-    
+    public boolean crearUsuario(String sql);
+    public short obtenerIdUsuario();
+    public boolean actualizarAvatar(Usuario usuario);
+    public Usuario comprobarPassword(Usuario usuario);
+    public Usuario obtenerUsuario(Usuario usuario);
 }

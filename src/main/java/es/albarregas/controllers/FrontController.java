@@ -60,13 +60,15 @@ public class FrontController extends HttpServlet {
         ArrayList<Producto> listaPortatiles = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = null;
+        Cookie cookieUsuario = null;
         ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
         ArrayList<Categoria> listaCategorias = new ArrayList<>();
         ArrayList<Categoria> listaCategoriasRelevantes = new ArrayList<>();
         Producto productoCarrito;
-
+        request.getSession().setAttribute("dirImagen", "/IMAGENES/AVATARES/");
         if (request.getParameter("accion") != null) {
             cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
+            cookieUsuario = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieUsuario");
             if (cookieAnonimo != null) {
                 if (!cookieAnonimo.getValue().equals("")) {
                     String[] datosCookie = cookieAnonimo.getValue().split("#");
@@ -78,7 +80,31 @@ public class FrontController extends HttpServlet {
                         listaProductosCarrito.add(productoCarrito);
                     }
                     if (!listaProductosCarrito.isEmpty() && request.getSession().getAttribute("listaProductos") != null) {
-                        ArrayList <Producto> nuevaLista = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
+                        ArrayList<Producto> nuevaLista = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
+                        listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(nuevaLista, listaProductosCarrito);
+                        int cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
+                        double totalCarrito = UtilidadesProducto.calcularTotal(listaProductosCarrito);
+                        request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
+                        request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
+                        request.getSession().setAttribute("totalCarrito", totalCarrito);
+                    }
+
+                    cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
+                    response.addCookie(cookieAnonimo);
+                }
+            }
+            if (cookieUsuario != null) {
+                if (!cookieUsuario.getValue().equals("")) {
+                    String[] datosCookie = cookieAnonimo.getValue().split("#");
+                    for (String i : datosCookie) {
+                        String[] productoCookie = i.split("-");
+                        productoCarrito = new Producto();
+                        productoCarrito.setIdProducto(Short.parseShort(productoCookie[0]));
+                        productoCarrito.setCantidad(Short.parseShort(productoCookie[1]));
+                        listaProductosCarrito.add(productoCarrito);
+                    }
+                    if (!listaProductosCarrito.isEmpty() && request.getSession().getAttribute("listaProductos") != null) {
+                        ArrayList<Producto> nuevaLista = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
                         listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(nuevaLista, listaProductosCarrito);
                         int cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
                         double totalCarrito = UtilidadesProducto.calcularTotal(listaProductosCarrito);

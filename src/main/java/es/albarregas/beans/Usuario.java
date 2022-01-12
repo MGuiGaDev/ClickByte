@@ -13,38 +13,28 @@ import java.util.Date;
  */
 public class Usuario implements Serializable{
     
-    //private byte idUsuario;
-    
+    private short idUsuario;
     private String nombre;
     private String apellidos;
     private String nif;
     private String email;
     private String telefono;
     private String direccion;
-    private char codigoPostal; //perfecto para codigo postal => 65535
+    private String codigoPostal; //perfecto para codigo postal => 65535
     private String localidad;
     private String provincia;
     private String password;
     private Date ultimoAcceso;
     private String avatar;
-    //private byte[] imagenAvatar;
-    /*
-    public byte[] getImagenAvatar() {
-        return imagenAvatar;
-    }
-
-    public void setImagenAvatar(byte[] imagenAvatar) {
-        this.imagenAvatar = imagenAvatar;
-    }*/
-/*
-    public byte getIdUsuario() {
+    
+    public short getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(byte idUsuario) {
+    public void setIdUsuario(short idUsuario) {
         this.idUsuario = idUsuario;
     }
-*/
+
     public String getEmail() {
         return email;
     }
@@ -101,11 +91,11 @@ public class Usuario implements Serializable{
         this.direccion = direccion;
     }
 
-    public char getCodigoPostal() {
+    public String getCodigoPostal() {
         return codigoPostal;
     }
 
-    public void setCodigoPostal(char codigoPostal) {
+    public void setCodigoPostal(String codigoPostal) {
         this.codigoPostal = codigoPostal;
     }
 

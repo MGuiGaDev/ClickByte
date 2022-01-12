@@ -31,7 +31,9 @@ body {
     display: none;
     height: 350px;
 }
-
+.data__body {
+    height: 100%;
+}
 .activo{
     display: block;
 }
@@ -69,14 +71,15 @@ input:focus{
     border: 1px solid black;
     display: flex;
     flex-direction: column;
-    height: 200px;
+    height: 100%;
+    gap: .5rem;
 }
 .avatar__previous {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 200px;
 }
 .avatar__img {
     width: 100px;

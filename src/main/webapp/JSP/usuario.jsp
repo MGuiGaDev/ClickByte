@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : 28-dic-2021, 11:54:32
+    Document   : usuario.jsp
+    Created on : 08-ene-2022, 0:19:26
     Author     : Manuel Guillén Gallardo
 --%>
 
@@ -8,15 +8,14 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<c:set var="contexto" value="${pageContext.request.contextPath}" scope="application"/>
-<c:set var="dirImagen" value="${sessionScope.dirImagen}" scope="application"/>
 <!DOCTYPE html>
-<html lang="es">
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>ClickByte</title>
-        <style><%@include file="/CSS/index.css"%></</style>
-        <style><%@include file="/CSS/modales.css"%></</style>
+        <style><%@include file="../CSS/index.css"%></</style>
+        <style><%@include file="../CSS/modales.css"%></</style>
+        <style><%@include file="../CSS/vistaProducto.css"%></</style>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="shortcut icon" href="logo_clico.ico" type="image/x-icon" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -27,60 +26,22 @@
             <!-- 
                 MODALES 
             -->
-            <c:if test="${requestScope.mensajeCrearCuenta != null}">
-                <form class="modal__aviso__crearCuenta" action="IniciarSesionController" method="POST">
-                    <div class="aviso__crearCuenta"">
-                        <div class="cerrar__aviso">
-                            <button name="accion" value="cerrar"><span class="material-icons">clear</span></button>
-                        </div>
-                        <div class="logo__aviso">
-                            <h1 class="clickbyte__title">ClickByte.es</h1>
-                        </div>
-                        <div class="info__aviso">
-                            <h2>Para realizar una compra debe iniciar sesión o crear una cuenta de usuario.</h2>
-                        </div>
-                    </div>
-                </form>
-            </c:if>
-            <div id="modal__busqueda" class="modal__busqueda">
-                <form  action="BusquedaController" method="POST" class="form__busqueda" id="form__busqueda">
-                    <div class="busqueda__body">
-                        <div class="busqueda__data">
-                            <input type="search" autofocus class="busqueda__input" name="busqueda__input"><button name="accion" value="buscar"><span class="material-icons" style="font-size: 30px;">search</span></button>
-                        </div>
-                        <div class="mas__buscados">
-                            <h2>LO MÁS BUSCADO</h2>
-                            <div>
-                                <button name="accion" value="portátil" class="btn__mb">Portátil</button> <button name="accion" value="tablet" class="btn__mb">Tablet</button> <button name="accion" value="mac" class="btn__mb">Mac</button> <button name="accion" value="placa" class="btn__mb">Placa</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="busqueda__footer">
-                        <a id="cerrar__modal__busqueda">CERRAR</a>
-                        <button name="accion" value="buscar">BUSCAR</button>
-                    </div>
-                </form>
-            </div>
             <div id="modal__login" class="modal__login">
-                <form class="login" id="login" action="IniciarSesionController" method="POST">
+                <form class="login" id="login">
                     <div class="login__header">
                         <p>Iniciar sesi&oacute;n</p>
                         <span class="material-icons" id="close__login">close</span>
                     </div>
-                    <div class="login__body" id="login__body">
+                    <div class="login__body" id="form__count">
                         <div class="form__group">
-                            <label for="email" class="label">@Email</label>
-                            <input type="email" class="input__login" id="email" name="email"
-                                   placeholder="Ej: joaquin08@gmail.com">
+                            <input type="email" class="inputLogin" id="email" name="email" required>
+                            <label for="email" class="label">@Email*</label>
                         </div>
-                        <div class="form__group">
-                            <label for="password" class="label">Contraseña</label>
-                            <input type="password" class="input__login" id="password" name="password"
-                                   placeholder="Ej: 123asd$=">
-                        </div>
-                        <div class="form__group show">
-                            <input type="checkbox" id="show">
-                            <label for="show">Mostrar contraseña</label>
+                        <div class="form__group user__account">
+                            <input type="password" class="inputLogin" id="password" name="password" required>
+                            <label for="password" class="label">Contrase&ntilde;a*</label>
+                            <span class="material-icons" id="pass__visibility"
+                                  style="font-size: 16px; color: #dadada;">visibility_off</span>
                         </div>
                     </div>
                     <div class="login__footer">
@@ -88,7 +49,7 @@
                             <span class="text">Crear cuenta</span>
                             <span class="material-icons">person_add</span>
                         </a>
-                        <button class="btn__login" id="btn__login" name="accion" value="iniciarSesion" disabled>
+                        <button class="btn__login" id="btn__login">
                             <span class="text">Iniciar sesi&oacute;n</span>
                             <span class="material-icons">login</span>
                         </button>
@@ -96,7 +57,7 @@
                 </form>
             </div>
             <div id="modal__carrito" class="modal__carrito">
-                <div action="FinalizarCarritoController" method="POST" class="carrito" id="carrito">
+                <div class="carrito" id="carrito">
                     <div class="carrito__header">
                         <p class="p-title">Mi carrito</p>
                         <span class="material-icons" id="close__carrito">close</span>
@@ -111,7 +72,6 @@
                                         </div>
                                         <div class="descripcion__producto__carrito">
                                             <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
-                                            <br>
                                             <div class="gestion__unidad">
                                                 <div class="container__producto__carrito__unidades">
                                                     <p>Unidades:</p>
@@ -122,14 +82,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="container__producto__carrito__unidades delete__unidad">
-                                                    <div>
-                                                        <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">clear</span>
-                                                    </div>
+                                                    <span class="material-icons" data-idProducto="${productoCarrito.idProducto}">delete</span>
                                                 </div>
                                             </div>
-                                            <br>
-                                            <p class="producto__carrito__precio">Importe unidad: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
-                                            <p class="producto__carrito__precio">Importe total: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio*productoCarrito.cantidad}" /></p>
+                                            <p class="producto__carrito__precio"><fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -149,7 +105,7 @@
                                 <p>Total: </p>
                                 <p id="total__carrito"><fmt:formatNumber type="currency" minFractionDigits="2"  value="${totalCarrito}"/></p>
                             </div>
-                            <form action="FinalizarCarritoController" method="POST" class="acciones__carrito">
+                            <form action="FinalizarCarrito" method="POST" class="acciones__carrito">
                                 <span class="material-icons accion__carrito" id="eliminar__carrito">delete</span>
                                 <button name="accionCarrito" value="pagar" class="accion__carrito">REALIZAR COMPRA</button>
                             </form>
@@ -169,20 +125,20 @@
             <div class="container__nav">
                 <ul class="nav">
                     <li class="nav__item">
-                        <a class="nav__item__button" title="Buscar" id="buscar">
+                        <a class="nav__item__button" title="Buscar">
                             <span class="material-icons">search</span>
                         </a>
                     </li>
                     <li class="nav__item">
                         <c:choose>
-                            <c:when test="${sessionScope.usuario!=null}">
-                                <form action="GestionarCuentaController" method="POST">
+                            <c:when test="${usuario!=null}">
+                                <form action="GestionarCuenta" method="POST">
                                     <button class="nav__item__button" title="Mi Cuenta" id="open__modal__login">
-                                        <img src="${contexto}/IMAGENES/AVATARES/${usuario.avatar}" class="avatar__usuario"/>
+                                        <img src="${contexto}${dirImagen}${usuario.avatar}" class="avatar__usuario"/>
                                     </button>  
                                 </form>
                             </c:when>
-                            <c:when test="${sessionScope.usuario==null}">
+                            <c:when test="${usuario==null}">
                                 <a class="nav__item__button" title="Mi Cuenta" id="open__modal__login">
                                     <span class="material-icons">perm_identity</span>
                                 </a>
@@ -209,19 +165,11 @@
             </div>
         </header>
         <main>
-            <section class="container__menu">
+            <div class="container__menu">
                 <a id="btn__menu" class="btn__menu">
                     <span class="material-icons">menu</span>
                     <span>Todas las categor&iacute;as</span>
                 </a>
-                <ul class="nav__social">
-                    <li><a><i class="fab fa-facebook"></i></a></li>
-                    <li><a><i class="fab fa-twitter"></i></a></li>
-                    <li><a><i class="fab fa-whatsapp"></i></a></li>
-                    <li><a><i class="fab fa-instagram"></i></a></li>
-                    <li><a><i class="fab fa-twitch"></i></a></li>
-                    <li><a><i class="fab fa-youtube-square"></i></a></li>
-                </ul>
                 <!-- MODAL SIMULADO -->
                 <form id="modal__menu" class="modal__menu" action="CategoriaController" method="POST">
                     <ul class="menu__list" id="menu__list">
@@ -233,61 +181,11 @@
                     </ul>
                 </form>
                 <!-- FIN MODAL -->
-            </section>
-            <section class="container__video__card">
-                <div class="video__card">
-                    <p>Infórmate sobre nuestro SET-UP para GAMERS.</p>
-                    <a class="video__card__btn" href="#"><span>+ INFO</span></a>
-                </div>
-            </section>
-            <video autoplay muted loop class="container__video">
-                <source src="IMAGENES/APP/Video Games - 89894.mp4">
-            </video>
-
-            <section class="container__categorias__relevantes">
-                <div class="categorias__relevantes__header">
-                    <h2>Categorías más relevantes</h2>
-                </div>
-                <form class="categorias__relevantes__body" action="CategoriaController" method="POST">
-                    <c:forEach var="categoriaRelevante" items="${sessionScope.listaCategoriasRelevantes}">
-                        <button class="categoria" value="${categoriaRelevante.idCategoria}" name="categoria">
-                            <div class="container__categoria__img">
-                                <img src="IMAGENES/APP/categorias/${categoriaRelevante.direccionImagen}" class="categoria__img">
-                            </div>
-                        </button>
-                    </c:forEach>
-                </form>
-            </section>
-            <section class="container__productos">
-                <div class="productos__header">
-                    <input type="button" hidden id="nombreCategoria" value="${listaPortatiles[0].nombreCategoria}"/>
-                    <h2>Últimos portátiles</h2>
-                </div>
-                <form class="productos__body" action="ProductoController" method ="POST">
-                    <c:forEach var="portatil" items="${sessionScope.listaPortatiles}">
-                        <div class="producto" id="portatiles">
-                            <div class="container__productos__img">
-                                <img src="IMAGENES/APP/productos/${portatil.direccionImagen}.jpg" class="productos__img">
-                            </div>
-                            <div class="container__productos__desc">
-                                <p>
-                                    <c:out value="${portatil.nombre}" />
-                                </p>
-                                <p>
-                                    <fmt:formatNumber type="currency" minFractionDigits="2" value="${portatil.precio}" />
-                                </p>
-                            </div>
-                            <div class="container__productos__btn">
-                                <span class="material-icons producto__btn span__exception" id="${portatil.idProducto}">add_shopping_cart</span>
-                                <button class="producto__btn" name="idProducto" value="${portatil.idProducto}">VER DETALLE</button>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </form>
-            </section>
+            </div>
         </main>
-        <script><%@include file="/JAVASCRIPT/header.js"%></script>
-        <script><%@include file="/JAVASCRIPT/iniciarSesion.js"%></script>
-        <script><%@include file="/JAVASCRIPT/gestionarCarrito.js"%></script>
+        <%@include file="../INCLUDES/footer.inc"%>
+        <script><%@include file="../JAVASCRIPT/header.js"%></script>
+        <script><%@include file="../JAVASCRIPT/gestionarCarrito.js"%></script>
     </body>
 </html>
+

@@ -39,7 +39,10 @@ body::-webkit-scrollbar-thumb {
     background: var(--c-primary);
     /* roundness of the scroll thumb */
 }
-
+button {
+    cursor: pointer;
+    border: none;
+}
 .material-icons {
     cursor: pointer;
 }
@@ -119,6 +122,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     height: 100%;
 }
 .nav__item__button{
+    border: none;
     cursor: pointer;
     color: var(--c-primary);
     height: 70px;
@@ -127,8 +131,14 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     width: 70px;
     font-size: 20px;
     font-weight: bolder;
+    background: transparent;
 }
-
+.avatar__usuario {
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    border: 1px solid white;
+}
 .nav__item__button:hover {
     background: var(--c-primary);
     color: white;

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : categoria
-    Created on : 27-dic-2021, 20:24:01
+    Document   : resultadoBusqueda
+    Created on : 11-ene-2022, 13:17:43
     Author     : Manuel Guillén Gallardo
 --%>
 
@@ -15,10 +15,11 @@
         <title>ClickByte</title>
         <style><%@include file="../CSS/index.css"%></</style>
         <style><%@include file="../CSS/modales.css"%></</style>
+        <style><%@include file="../CSS/vistaBusqueda.css"%></</style>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="shortcut icon" href="logo_clico.ico" type="image/x-icon" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     </head>
 </head>
 <body id="body">
@@ -225,38 +226,76 @@
             </form>
             <!-- FIN MODAL -->
         </div>
-
-
-        <section class="container__productos">
-            <div class="productos__header">
-                <input type="button" hidden id="nombreCategoria" value="${listaProductosIdCategoria[0].nombreCategoria}"/>
-                <h2><c:out value="${listaProductosIdCategoria[0].nombreCategoria}" /></h2>
-            </div>
-            <form class="productos__body" action="ProductoController" method ="POST">
-                <c:forEach var="producto" items="${listaProductosIdCategoria}">
-                    <div class="producto">
-                        <div class="container__productos__img">
-                            <img src="IMAGENES/APP/productos/${producto.direccionImagen}.jpg" class="productos__img">
+        <c:choose>
+            <c:when test="${requestScope.numeroResultado!=null}">
+                <section class="titulo__vista__busqueda">
+                    <h2>Para la búsqueda "<c:out value="${valorBuscado}"/>" se han encontrado <c:out value="${requestScope.numeroResultado}"/> resultados.</h2>
+                </section>
+                <section class="container__vista__busqueda">
+                    <div class="container__parametros__busqueda">
+                        <div class="filtro__marcas">
+                            <h3>Filtro por marca</h3>
+                            <c:forEach var="marca" items="${marcas}">
+                                <label class="marca"><input type="checkbox" checked="true" data-marca="${marca}"> ${marca}</label>
+                            </c:forEach>
                         </div>
-                        <div class="container__productos__desc">
-                            <p>
-                                <c:out value="${producto.nombre}" />
-                            </p>
-                            <p>
-                                <fmt:formatNumber type="currency" minFractionDigits="2" value="${producto.precio}" />
-                            </p>
-                        </div>
-                        <div class="container__productos__btn">
-                            <span class="material-icons producto__btn span__exception" id="${producto.idProducto}">add_shopping_cart</span>
-                            <button class="producto__btn" name="idProducto" value="${producto.idProducto}">VER DETALLE</button>
+                        <div class="filtro__precios">
+                            <h3>Filtro por precio</h3>
+                            <div class="container__range">
+                                <input type="range" min="0" max="${precioMasAlto}" value="${precioMasAlto}" class="range" id="range">
+                                <span class="slider__value" id="slider__value">${precioMasAlto}0 €</span>
+                            </div>
                         </div>
                     </div>
-                </c:forEach>
-            </form>
-        </section>
+                    <div class="container__resultado__busqueda">
+                        <div class="container__productos" id="container__productos">
+                            <form class="productos__body" action="ProductoController" method ="POST">
+                                <c:forEach var="producto" items="${listaProductosBuscados}">
+                                    <div class="producto" data-precio="${producto.precio}" data-marca="${producto.marca}">
+                                        <div class="container__productos__img">
+                                            <img src="IMAGENES/APP/productos/${producto.direccionImagen}.jpg" class="productos__img">
+                                        </div>
+                                        <div class="container__productos__desc">
+                                            <p value="${producto.marca}">
+                                                <c:out value="${producto.nombre}" />
+                                            </p>
+                                            <p>
+                                                <fmt:formatNumber type="currency" minFractionDigits="2" value="${producto.precio}" />
+                                            </p>
+                                        </div>
+                                        <div class="container__productos__btn">
+                                            <span class="material-icons producto__btn span__exception" id="${producto.idProducto}">add_shopping_cart</span>
+                                            <button class="producto__btn" name="idProducto" value="${producto.idProducto}">VER DETALLE</button>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </c:when>
+
+
+            <c:when test="${requestScope.numeroResultado==null}">
+                <section class="titulo__vista__busqueda">
+                    <h2>No se han encontrado resultados</h2>
+                </section>
+                <section class="container__vista__busqueda">
+                    <div class="container__parametros__busqueda">
+
+                    </div>
+                    <div class="container__resultado__busqueda">
+
+                    </div>
+                </section>
+            </c:when>
+        </c:choose>
     </main>
     <script><%@include file="../JAVASCRIPT/header.js"%></script>
     <script><%@include file="../JAVASCRIPT/iniciarSesion.js"%></script>
     <script><%@include file="../JAVASCRIPT/gestionarCarrito.js"%></script>
+    <script><%@include file="../JAVASCRIPT/resultadoBusquedaFiltros.js"%></script>
+    <!-- AJAX -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
