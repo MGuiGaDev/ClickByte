@@ -54,8 +54,13 @@ function filtrarPorMarca(evento) {
             }
         }
         let nuevaListaProductos = Array.from(document.querySelectorAll(".producto"));
-        let valores = nuevaListaProductos.filter(element => element.style.display!=="none").map(element => element.dataset.precio);
-        let valorMaximo = Math.max(...valores);
+        let valores = nuevaListaProductos.filter(element => element.style.display !== "none").map(element => element.dataset.precio);
+        let valorMaximo;
+        if (valores.length === 0) {
+            valorMaximo = 0;
+        } else {
+            valorMaximo = Math.max(...valores);
+        }
         range.value = valorMaximo;
         slider__value.innerHTML = valorMaximo + ",00 \u20AC";
     }
@@ -73,8 +78,7 @@ function establecerValor() {
             p.style = "display: block;";
             marcaEvento = marcas.find(element => element.innerText.includes(p.dataset.marca));
             marcaEvento.style = "display: block;";
-            input = marcaEvento.querySelector("input").checked=true;
-            //input.setAttribute("checked", true);
+            marcaEvento.querySelector("input").checked = true;
         }
     }
 }
