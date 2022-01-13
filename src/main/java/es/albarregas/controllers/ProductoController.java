@@ -5,6 +5,8 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.IProductoDAO;
+import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.Producto;
 import es.albarregas.models.UtilidadesProducto;
 import java.io.IOException;
@@ -48,16 +50,14 @@ public class ProductoController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "/JSP/producto.jsp";
-        String idProducto = null;
-        ArrayList<Producto> listaProductos = new ArrayList<>();
         Producto producto = null;
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IProductoDAO ipd = daof.getProductoDAO();
 
         if (request.getParameter("idProducto") != null) {
-            idProducto = request.getParameter("idProducto");
-            if (request.getSession().getAttribute("listaProductos") != null) {
-                listaProductos = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
-                producto = UtilidadesProducto.verDetalleProducto(listaProductos, idProducto);
-            }
+            producto = new Producto();
+            producto.setIdProducto(Short.parseShort(request.getParameter("idProducto")));
+            producto = ipd.cargarProducto(producto);
             if (producto != null) {
                 request.setAttribute("producto", producto);
             }

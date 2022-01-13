@@ -136,7 +136,7 @@
         FIN MODALES 
     -->
     <form action="FrontController" method="POST" class="container__logo">
-        <button name="accion" value="producto.jsp">
+        <button name="volver" value="volver">
             <img src="IMAGENES/APP/logo_clico.png" alt="Clickbyte" class="halfclick__logo">
             <h1 class="clickbyte__title">ClickByte.es</h1>
         </button>

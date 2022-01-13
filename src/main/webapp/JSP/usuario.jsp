@@ -175,7 +175,7 @@
                     <ul class="menu__list" id="menu__list">
                         <c:forEach var="categoria" items="${sessionScope.listaCategorias}">
                             <li>
-                                <button type="submit" id="${categoria.idCategoria}" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
+                                <button type="submit" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
                             </li>
                         </c:forEach>
                     </ul>

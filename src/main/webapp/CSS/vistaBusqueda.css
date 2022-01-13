@@ -67,3 +67,14 @@ and open the template in the editor.
     width: 30%;
     text-align: center;
 }
+.producto {
+    width: 200px;
+}
+.container__productos__img img {
+    width: 75px;
+    height: 75px;
+}
+.container__productos__btn button,.container__productos__btn span {
+    height: 70px;
+    width: 90px;
+}

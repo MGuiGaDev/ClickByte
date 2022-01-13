@@ -27,7 +27,13 @@ function asignarEventos() {
 
     container__productos = document.querySelector(".container__productos");
     carrito__footer = document.querySelector(".carrito__footer");
+    container__resultado__busqueda = document.querySelector(".container__resultado__busqueda");
+    
     container__productos.addEventListener("click", function (evento) {
+        cargarCarritoConProducto(evento);
+    });
+    
+    container__resultado__busqueda.addEventListener("click", function (evento) {
         cargarCarritoConProducto(evento);
     });
 

@@ -5,10 +5,14 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.IProductoDAO;
+import es.albarregas.DAOFactory.DAOFactory;
+import es.albarregas.beans.Categoria;
 import es.albarregas.beans.Producto;
-import es.albarregas.models.UtilidadesProducto;
+import es.albarregas.models.UtilidadesCategoria;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -48,18 +52,19 @@ public class CategoriaController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "JSP/categoria.jsp";
-        ArrayList<Producto> listaProductos = new ArrayList<>();
-        ArrayList<Producto> listaProductosIdCategoria = new ArrayList<>();
+        List<Producto> listaProductosIdCategoria = new ArrayList<>();
+        Producto producto = null;
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IProductoDAO ipd = daof.getProductoDAO();
         if (request.getParameter("categoria") != null) {
             String idCategoria = request.getParameter("categoria");
-            if (request.getParameter("nombreCategoria") != null) {
-                String nombreCategoria = request.getParameter("nombreCategoria");
-                request.setAttribute("nombreCategoria", nombreCategoria);
-            }
-            listaProductos = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
-            listaProductosIdCategoria = UtilidadesProducto.filtrarProductosPorIdCategoria(listaProductos, idCategoria);
+            producto = new Producto();
+            producto.setIdCategoria(Short.parseShort(idCategoria));
+            listaProductosIdCategoria = ipd.obtenerProductosPorCategoria(producto);
+            String nombreCategoria = UtilidadesCategoria.obtenerNombreCategoria(Short.parseShort(idCategoria), (ArrayList<Categoria>) request.getSession().getAttribute("listaCategorias"));
             if (!listaProductosIdCategoria.isEmpty()) {
                 request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
+                request.setAttribute("nombreCategoria", nombreCategoria);
             }
         }
         request.getRequestDispatcher(url).forward(request, response);

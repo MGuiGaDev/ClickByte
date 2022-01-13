@@ -7,11 +7,13 @@ package es.albarregas.controllers;
 
 import es.albarregas.DAO.IUsuarioDAO;
 import es.albarregas.DAOFactory.DAOFactory;
+import es.albarregas.beans.Producto;
 import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
 import es.albarregas.models.UtilidadesUsuario;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -60,6 +62,8 @@ public class CrearCuentaController extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "FrontController";
+        Producto productoCarrito = null;
+        ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = null;
         Cookie cookieUsuario = null;
@@ -72,7 +76,7 @@ public class CrearCuentaController extends HttpServlet {
         if (request.getParameter("accion") != null) {
             switch (accion) {
                 case "cancelar":
-                    url = "FrontController";
+                    url = "index.jsp";
                     break;
                 case "crear":
                     try {
@@ -89,12 +93,12 @@ public class CrearCuentaController extends HttpServlet {
                                 url = "JSP/usuario.jsp";
                                 request.getSession().setAttribute("usuario", usuario);
                                 cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-                                if (!cookieAnonimo.getValue().equals("")) {
-                                    cookieUsuario = new Cookie("cookieUsuario", cookieAnonimo.getValue());
-                                    cookieAnonimo.setMaxAge(0);
-                                    response.addCookie(cookieAnonimo);
-                                    cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                                    response.addCookie(cookieUsuario);
+                                if (cookieAnonimo != null) {
+                                    if (!cookieAnonimo.getValue().equals("")) {
+                                        listaProductosCarrito = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
+                                        cookieAnonimo.setMaxAge(0);
+                                        response.addCookie(cookieAnonimo);
+                                    }
                                 } else {
                                     cookieUsuario = new Cookie("cookieUsuario", "");
                                     cookieUsuario.setMaxAge(60 * 60 * 24 * 2);

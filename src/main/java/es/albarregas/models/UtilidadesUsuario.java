@@ -35,7 +35,7 @@ public class UtilidadesUsuario {
                     filePart.write(filePath);
                     resultado = nombreFichero.toString();
 
-                } else {
+                } else { //SUSTITUIR RESULTADOS POR VALIDEZ > [ERRORES] resultado = "0" || resultado = "1" || resultado = "2"
                     resultado = "La imagen sobrepasa el tamaño permitido";
                 }
             } else {

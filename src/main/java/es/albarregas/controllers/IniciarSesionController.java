@@ -10,7 +10,6 @@ import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;

@@ -227,7 +227,7 @@
                     <ul class="menu__list" id="menu__list">
                         <c:forEach var="categoria" items="${sessionScope.listaCategorias}">
                             <li>
-                                <button type="submit" id="${categoria.idCategoria}" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
+                                <button type="submit" name="categoria" value="${categoria.idCategoria}"><c:out value="${categoria.nombre}"/></button>   
                             </li>
                         </c:forEach>
                     </ul>
@@ -243,48 +243,8 @@
             <video autoplay muted loop class="container__video">
                 <source src="IMAGENES/APP/Video Games - 89894.mp4">
             </video>
-
-            <section class="container__categorias__relevantes">
-                <div class="categorias__relevantes__header">
-                    <h2>Categorías más relevantes</h2>
-                </div>
-                <form class="categorias__relevantes__body" action="CategoriaController" method="POST">
-                    <c:forEach var="categoriaRelevante" items="${sessionScope.listaCategoriasRelevantes}">
-                        <button class="categoria" value="${categoriaRelevante.idCategoria}" name="categoria">
-                            <div class="container__categoria__img">
-                                <img src="IMAGENES/APP/categorias/${categoriaRelevante.direccionImagen}" class="categoria__img">
-                            </div>
-                        </button>
-                    </c:forEach>
-                </form>
-            </section>
-            <section class="container__productos">
-                <div class="productos__header">
-                    <input type="button" hidden id="nombreCategoria" value="${listaPortatiles[0].nombreCategoria}"/>
-                    <h2>Últimos portátiles</h2>
-                </div>
-                <form class="productos__body" action="ProductoController" method ="POST">
-                    <c:forEach var="portatil" items="${sessionScope.listaPortatiles}">
-                        <div class="producto" id="portatiles">
-                            <div class="container__productos__img">
-                                <img src="IMAGENES/APP/productos/${portatil.direccionImagen}.jpg" class="productos__img">
-                            </div>
-                            <div class="container__productos__desc">
-                                <p>
-                                    <c:out value="${portatil.nombre}" />
-                                </p>
-                                <p>
-                                    <fmt:formatNumber type="currency" minFractionDigits="2" value="${portatil.precio}" />
-                                </p>
-                            </div>
-                            <div class="container__productos__btn">
-                                <span class="material-icons producto__btn span__exception" id="${portatil.idProducto}">add_shopping_cart</span>
-                                <button class="producto__btn" name="idProducto" value="${portatil.idProducto}">VER DETALLE</button>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </form>
-            </section>
+            <div class="container__productos"></div>
+            <div class="container__resultado__busqueda"></div>
         </main>
         <script><%@include file="/JAVASCRIPT/header.js"%></script>
         <script><%@include file="/JAVASCRIPT/iniciarSesion.js"%></script>

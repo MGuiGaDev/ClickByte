@@ -8,6 +8,7 @@ package es.albarregas.models;
 import es.albarregas.beans.Categoria;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class UtilidadesCategoria implements Serializable{
 
-    public static ArrayList<Categoria> filtrarCategoriasRelevantes(ArrayList<Categoria> listaCategorias) {
+    public static ArrayList<Categoria> filtrarCategoriasRelevantes(List<Categoria> listaCategorias) {
         ArrayList<Categoria> listaCategoriasRelevantes = new ArrayList<>();
         if (!listaCategorias.isEmpty()) {
             for (Categoria c : listaCategorias) {
@@ -25,6 +26,15 @@ public class UtilidadesCategoria implements Serializable{
             }
         }
         return listaCategoriasRelevantes;
+    }
+    public static String obtenerNombreCategoria(short idCategoria, List<Categoria>listaCategorias) {
+        String nombreCategoria = null;
+        for(Categoria cat : listaCategorias) {
+            if(cat.getIdCategoria()==idCategoria) {
+                nombreCategoria = cat.getNombre();
+            }
+        }
+        return nombreCategoria;
     }
 
 }

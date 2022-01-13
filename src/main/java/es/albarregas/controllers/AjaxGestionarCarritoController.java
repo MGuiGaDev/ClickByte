@@ -5,12 +5,15 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.IProductoDAO;
+import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.Producto;
 import es.albarregas.models.UtilidadesCookie;
 import es.albarregas.models.UtilidadesProducto;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -51,38 +54,37 @@ public class AjaxGestionarCarritoController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IProductoDAO ipd = daof.getProductoDAO();
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
         JSONObject objeto = null;
 
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-        Cookie cookieUsuario = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieUsuario");
 
-        ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
-        ArrayList<Producto> listaProductos = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
+        List<Producto> listaProductosCarrito = new ArrayList<>();
 
         if (request.getSession().getAttribute("listaProductosCarrito") != null) {
             listaProductosCarrito = (ArrayList<Producto>) request.getSession().getAttribute("listaProductosCarrito");
-            listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(listaProductos, listaProductosCarrito);
         }
 
         Producto productoCarrito = null;
-
         int cantidadProductosCarrito = 0;
         double total = 0;
-
         objeto = new JSONObject();
-        productoCarrito = new Producto();
+
         if (request.getParameter("accion") != null) {
+            productoCarrito = new Producto();
             switch (accion) {
                 case "nuevoProducto":
                     if (request.getParameter("id") != null) {
-                        String idProducto = request.getParameter("id");
+                        productoCarrito.setIdProducto(Short.parseShort(request.getParameter("id")));
                         if (!listaProductosCarrito.isEmpty()) {
                             boolean esta = false;
                             for (Producto pro : listaProductosCarrito) {
-                                if (pro.getIdProducto() == Short.parseShort(idProducto)) {
+                                if (pro.getIdProducto() == productoCarrito.getIdProducto()) {
                                     pro.setCantidad((short) (pro.getCantidad() + 1));
                                     productoCarrito = new Producto();
                                     productoCarrito = pro;
@@ -90,18 +92,12 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                                 }
                             }
                             if (esta == false) {
-                                if (!listaProductos.isEmpty()) {
-                                    productoCarrito = new Producto();
-                                    productoCarrito = UtilidadesProducto.obtenerProductoParaCarrito(listaProductos, Short.parseShort(idProducto));
-                                    listaProductosCarrito.add(productoCarrito);
-                                }
-                            }
-                        } else {
-                            if (!listaProductos.isEmpty()) {
-                                productoCarrito = new Producto();
-                                productoCarrito = UtilidadesProducto.obtenerProductoParaCarrito(listaProductos, Short.parseShort(idProducto));
+                                productoCarrito = ipd.cargarProducto(productoCarrito);
                                 listaProductosCarrito.add(productoCarrito);
                             }
+                        } else {
+                            productoCarrito = ipd.cargarProducto(productoCarrito);
+                            listaProductosCarrito.add(productoCarrito);
                         }
 
                     }
@@ -152,44 +148,28 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                     }
                     break;
                 case "delete":
-                    listaProductosCarrito = new ArrayList<>();
+                    if (!listaProductosCarrito.isEmpty()) {
+                        listaProductosCarrito.clear();
+                    }
                     break;
             }
         }
 
         if (!listaProductosCarrito.isEmpty()) {
             cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
-            listaProductosCarrito = UtilidadesProducto.filtrarProductosEnCarrito(listaProductos, listaProductosCarrito);
             total = UtilidadesProducto.calcularTotal(listaProductosCarrito);
             request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
             request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
             request.getSession().setAttribute("totalCarrito", total);
             if (request.getSession().getAttribute("usuario") == null) {
-                cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito, cookieAnonimo);
+                cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito);
                 cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
                 response.addCookie(cookieAnonimo);
-            } else {
-                cookieUsuario = UtilidadesCookie.cargarCookie(listaProductosCarrito, cookieUsuario);
-                cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                response.addCookie(cookieUsuario);
-                if (cookieAnonimo != null) {
-                    cookieAnonimo.setMaxAge(0);
-                    response.addCookie(cookieAnonimo);
-                }
             }
         } else {
             request.getSession().removeAttribute("listaProductosCarrito");
             request.getSession().removeAttribute("cantidadProductosCarrito");
             request.getSession().removeAttribute("totalCarrito");
-            if (cookieUsuario == null) {
-                cookieAnonimo.setValue("");
-                cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-                response.addCookie(cookieAnonimo);
-            } else {
-                cookieUsuario.setValue("");
-                cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                response.addCookie(cookieUsuario);
-            }
         }
 
         if (!listaProductosCarrito.isEmpty()) {

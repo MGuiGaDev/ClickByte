@@ -29,12 +29,20 @@
                     <span class="material-icons">menu</span>
                     <span>Todas las categor&iacute;as</span>
                 </a>
+                <ul class="nav__social">
+                    <li><a><i class="fab fa-facebook"></i></a></li>
+                    <li><a><i class="fab fa-twitter"></i></a></li>
+                    <li><a><i class="fab fa-whatsapp"></i></a></li>
+                    <li><a><i class="fab fa-instagram"></i></a></li>
+                    <li><a><i class="fab fa-twitch"></i></a></li>
+                    <li><a><i class="fab fa-youtube-square"></i></a></li>
+                </ul>
                 <!-- MODAL SIMULADO -->
                 <form id="modal__menu" class="modal__menu" action="CategoriaController" method="POST">
                     <ul class="menu__list" id="menu__list">
                         <c:forEach var="categoria" items="${sessionScope.listaCategorias}">
                             <li>
-                                <button type="submit" id="${categoria.idCategoria}" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
+                                <button type="submit" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
                             </li>
                         </c:forEach>
                     </ul>
@@ -76,6 +84,7 @@
                     <span class="material-icons producto__btn span__exception btn__vista__producto" id="${producto.idProducto}" style="font-size: 30px;">add_shopping_cart</span>
                 </div>
             </section>
+            <div class="container__resultado__busqueda"></div>
         </main>
         <%@include file="../INCLUDES/footer.inc"%>
         <script><%@include file="../JAVASCRIPT/header.js"%></script>

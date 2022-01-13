@@ -68,12 +68,11 @@ function filtrarPorMarca(evento) {
 function establecerValor() {
     slider__value.innerHTML = range.value + ",00 \u20AC";
     let marcaEvento;
-    let input;
     for (let p of productos) {
         if (parseFloat(p.dataset.precio) > parseFloat(range.value)) {
             p.style = "display: none;";
             marcaEvento = marcas.find(element => element.innerText.includes(p.dataset.marca));
-            marcaEvento.style = "display: none;";
+            marcaEvento.querySelector("input").checked = false;
         } else {
             p.style = "display: block;";
             marcaEvento = marcas.find(element => element.innerText.includes(p.dataset.marca));

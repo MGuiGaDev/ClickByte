@@ -8,6 +8,7 @@ package es.albarregas.models;
 import es.albarregas.beans.Producto;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class UtilidadesProducto implements Serializable {
 
-    public static ArrayList<Producto> buscarProductos(ArrayList<Producto> listaProductos, String valorBuscado) {
+    public static ArrayList<Producto> buscarProductos(List<Producto> listaProductos, String valorBuscado) {
         ArrayList<Producto> listaProductosBuscados = new ArrayList<>();
         String[] valoresBuscados = null;
         if (valorBuscado.contains(" ")) {
@@ -42,7 +43,7 @@ public class UtilidadesProducto implements Serializable {
         return listaProductosBuscados;
     }
 
-    public static ArrayList<Producto> filtrarPortatiles(ArrayList<Producto> listaProductos) {
+    public static ArrayList<Producto> filtrarPortatiles(List<Producto> listaProductos) {
         ArrayList<Producto> listaPortatiles = new ArrayList<>();
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {
@@ -54,7 +55,7 @@ public class UtilidadesProducto implements Serializable {
         return listaPortatiles;
     }
 
-    public static ArrayList<Producto> filtrarProductosPorIdCategoria(ArrayList<Producto> listaProductos, String idCategoria) {
+    public static ArrayList<Producto> filtrarProductosPorIdCategoria(List<Producto> listaProductos, String idCategoria) {
         ArrayList<Producto> listaProductosPorCategoria = new ArrayList<>();
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {
@@ -99,7 +100,7 @@ public class UtilidadesProducto implements Serializable {
         return nuevaListaProductosCarrito;
     }
 
-    public static int cantidadTotalProductosCarrito(ArrayList<Producto> listaProductosCarrito) {
+    public static int cantidadTotalProductosCarrito(List<Producto> listaProductosCarrito) {
         int cantidadTotal = 0;
         for (Producto p : listaProductosCarrito) {
             cantidadTotal += p.getCantidad();
@@ -107,7 +108,7 @@ public class UtilidadesProducto implements Serializable {
         return cantidadTotal;
     }
 
-    public static Producto obtenerProductoParaCarrito(ArrayList<Producto> listaProductos, short idProducto) {
+    public static Producto obtenerProductoParaCarrito(List<Producto> listaProductos, short idProducto) {
         Producto producto = new Producto();
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {
@@ -120,7 +121,7 @@ public class UtilidadesProducto implements Serializable {
         return producto;
     }
 
-    public static double calcularTotal(ArrayList<Producto> listaProductosCarrito) {
+    public static double calcularTotal(List<Producto> listaProductosCarrito) {
         double total = 0;
         if (!listaProductosCarrito.isEmpty()) {
             for (Producto p : listaProductosCarrito) {
@@ -130,7 +131,7 @@ public class UtilidadesProducto implements Serializable {
         return total;
     }
 
-    public static ArrayList<String> filtroPorMarca(ArrayList<Producto> listaProductos) {
+    public static ArrayList<String> filtroPorMarca(List<Producto> listaProductos) {
         ArrayList<String> marcas = new ArrayList<>();
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {
@@ -146,7 +147,7 @@ public class UtilidadesProducto implements Serializable {
         return marcas;
     }
 
-    public static double filtroPrecioMasAlto(ArrayList<Producto> listaProductos) {
+    public static double filtroPrecioMasAlto(List<Producto> listaProductos) {
         double precioMasAlto = 0;
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {

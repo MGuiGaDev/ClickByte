@@ -5,10 +5,11 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.IProductoDAO;
+import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.Producto;
 import es.albarregas.models.UtilidadesProducto;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,39 +49,34 @@ public class BusquedaController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url = "/JSP/resultadoBusqueda.jsp";
-        ArrayList<Producto> listaProductos = (ArrayList<Producto>) request.getSession().getAttribute("listaProductos");
+        String url = "JSP/resultadoBusqueda.jsp";
         ArrayList<Producto> listaProductosBuscados = new ArrayList<>();
-        ArrayList<String>marcas = new ArrayList<>();
+        ArrayList<String> marcas = new ArrayList<>();
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IProductoDAO ipd = daof.getProductoDAO();
         double precioMasAlto = 0;
         String accion = "";
         String valorBuscado = "";
-        if (request.getParameter("accion") != null && !listaProductos.isEmpty()) {
+        if (request.getParameter("accion") != null) {
             accion = request.getParameter("accion");
             if (accion.equals("buscar")) {
                 valorBuscado = request.getParameter("busqueda__input");
             } else {
                 valorBuscado = accion;
             }
-            listaProductosBuscados = UtilidadesProducto.buscarProductos(listaProductos, valorBuscado);
+            request.setAttribute("valorBuscado", valorBuscado);
+            listaProductosBuscados = ipd.cargarProductosBuscados(valorBuscado);
+            if (listaProductosBuscados.isEmpty()) {
+                request.setAttribute("busquedaVacia", "La búsqueda no ha obtenido resultados");
+            } else {
+                request.setAttribute("listaProductosBuscados", listaProductosBuscados);
+                request.setAttribute("numeroResultado", listaProductosBuscados.size());
+                marcas = UtilidadesProducto.filtroPorMarca(listaProductosBuscados);
+                request.setAttribute("marcas", marcas);
+                precioMasAlto = UtilidadesProducto.filtroPrecioMasAlto(listaProductosBuscados);
+                request.setAttribute("precioMasAlto", precioMasAlto);
+            }
         }
-        
-        if(listaProductosBuscados.isEmpty()){
-            request.setAttribute("listaProductosBuscados", listaProductos);
-            request.setAttribute("numeroResultado", listaProductos.size());
-            marcas = UtilidadesProducto.filtroPorMarca(listaProductos);
-            request.setAttribute("marcas", marcas);
-            precioMasAlto = UtilidadesProducto.filtroPrecioMasAlto(listaProductos);
-            request.setAttribute("precioMasAlto", precioMasAlto);
-        } else {
-            request.setAttribute("listaProductosBuscados", listaProductosBuscados);
-            request.setAttribute("numeroResultado", listaProductosBuscados.size());
-            marcas = UtilidadesProducto.filtroPorMarca(listaProductosBuscados);
-            request.setAttribute("marcas", marcas);
-            precioMasAlto = UtilidadesProducto.filtroPrecioMasAlto(listaProductosBuscados);
-            request.setAttribute("precioMasAlto", precioMasAlto);
-        }
-        request.setAttribute("valorBuscado", valorBuscado);
         request.getRequestDispatcher(url).forward(request, response);
 
     }
