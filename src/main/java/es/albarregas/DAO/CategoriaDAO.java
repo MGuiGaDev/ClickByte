@@ -17,12 +17,11 @@ import java.util.ArrayList;
  * @author Manuel Guillén Gallardo
  */
 public class CategoriaDAO implements ICategoriaDAO{
-
+    private static Connection conexion = null;
     @Override
     public ArrayList<Categoria> listarCategorias() {
         ArrayList<Categoria> listadoCategorias = new ArrayList<>();
         Categoria categoria = null;
-        Connection conexion = null;
         Statement productosST = null;
         ResultSet productoRS = null;
         String consulta = "SELECT IdCategoria, c.nombre, c.imagen  from categorias c inner join productos using (IdCategoria) group by IdCategoria order by nombre;";

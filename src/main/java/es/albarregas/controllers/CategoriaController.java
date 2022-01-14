@@ -55,11 +55,11 @@ public class CategoriaController extends HttpServlet {
         List<Producto> listaProductosIdCategoria = new ArrayList<>();
         ArrayList<Categoria> listaCategorias = null;
         Producto producto = null;
-        DAOFactory daof = DAOFactory.getDAOFactory(1);
-        IProductoDAO ipd = daof.getProductoDAO();
 
         if (request.getParameter("categoria") != null) {
             producto = new Producto();
+            DAOFactory daof = DAOFactory.getDAOFactory(1);
+            IProductoDAO ipd = daof.getProductoDAO();
             producto.setIdCategoria(Short.parseShort(request.getParameter("categoria")));
             listaProductosIdCategoria = ipd.obtenerProductosPorCategoria(producto);
             if (request.getSession().getAttribute("listaCategorias") != null) {

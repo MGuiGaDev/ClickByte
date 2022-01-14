@@ -22,11 +22,11 @@ import java.util.logging.Logger;
  */
 public class ProductoDAO implements IProductoDAO {
 
+    private static Connection conexion = null;
     @Override
     public ArrayList<Producto> listarProductos() {
         ArrayList<Producto> listadoProductos = new ArrayList<>();
         Producto producto = null;
-        Connection conexion = null;
         Statement productosST = null;
         ResultSet productoRS = null;
         String consulta = "SELECT p.idProducto, p.IdCategoria, p.nombre, p.descripcion, p.precio, p.marca, p.imagen from productos p inner join categorias c using (IdCategoria);";
@@ -66,7 +66,6 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public Producto cargarProducto (Producto producto) {
         Producto nuevoProducto = null;
-        Connection conexion = null;
         PreparedStatement productoPT = null;
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, idCategoria, nombre, descripcion, precio, marca, imagen from productos where idProducto =?;";
@@ -118,7 +117,6 @@ public class ProductoDAO implements IProductoDAO {
                 listaIdProductos.append(",");
             }
         }
-        Connection conexion = null;
         Statement productosST = null;
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where idProducto in ("+listaIdProductos.toString()+");";
@@ -164,7 +162,6 @@ public class ProductoDAO implements IProductoDAO {
     public ArrayList<Producto> cargarProductosBuscados(String buscado) {
         ArrayList<Producto> productosBuscados = new ArrayList<>();
         Producto producto = null;
-        Connection conexion = null;
         String busquedaPreparada = "'%"+buscado+"%'";
         Statement productosPS = null;
         ResultSet productoRS = null;
@@ -204,7 +201,6 @@ public class ProductoDAO implements IProductoDAO {
     public ArrayList<Producto> obtenerProductosPorCategoria(Producto productoBuscado) {
         ArrayList<Producto> listaProductosPorCategoria = new ArrayList<>();
         Producto producto = null;
-        Connection conexion = null;
         PreparedStatement productosPS = null;
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where idCategoria = ?;";

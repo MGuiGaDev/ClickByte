@@ -152,7 +152,9 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                     }
                     break;
                 case "delete":
-                    listaProductosCarrito.clear();
+                    if (!listaProductosCarrito.isEmpty()) {
+                        listaProductosCarrito.clear();
+                    }
                     break;
             }
         }
@@ -163,26 +165,9 @@ public class AjaxGestionarCarritoController extends HttpServlet {
             request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
             request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
             request.getSession().setAttribute("totalCarrito", total);
-            if (request.getSession().getAttribute("usuario") == null) {
-                cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito);
-                cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-                response.addCookie(cookieAnonimo);
-            } else {
-                if (cookieAnonimo != null) {
-                    cookieAnonimo.setMaxAge(0);
-                    response.addCookie(cookieAnonimo);
-                }
-                /*if (request.getSession().getAttribute("pedido") != null) {
-
-                } else {
-
-                }*/
-            }
-
-        }
-
-        if (!listaProductosCarrito.isEmpty()) {
-
+            cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
+            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCarrito);
+            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
             objeto = new JSONObject();
             objeto.put("tipo", "success");
             objeto.put("idProducto", productoCarrito.getIdProducto());
@@ -192,11 +177,22 @@ public class AjaxGestionarCarritoController extends HttpServlet {
             objeto.put("precio", productoCarrito.getPrecio());
             objeto.put("cantidadTotal", cantidadProductosCarrito);
             objeto.put("total", total);
-        } else {
 
+        } else {
+            
+            request.getSession().removeAttribute("listaProductosCarrito");
+            request.getSession().removeAttribute("cantidadProductosCarrito");
+            request.getSession().removeAttribute("totalCarrito");
+            if (!cookieAnonimo.getValue().equals("")) {
+                cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
+                cookieAnonimo.setValue("");
+                cookieAnonimo.setMaxAge(0);
+            }
             objeto = new JSONObject();
             objeto.put("tipo", "vacio");
+
         }
+        response.addCookie(cookieAnonimo);
         response.setContentType("application/json");
         response.getWriter().print(objeto);
     }
