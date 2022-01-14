@@ -82,7 +82,6 @@ public class UtilidadesProducto implements Serializable {
     public static ArrayList<Producto> filtrarProductosEnCarrito(ArrayList<Producto> listaProductos, ArrayList<Producto> listaProductosCarrito) {
         ArrayList<Producto> nuevaListaProductosCarrito = new ArrayList<>();
         ArrayList<Short> idProductosCarrito = new ArrayList<>();
-        short orden = 1;
         if (!listaProductos.isEmpty() && !listaProductosCarrito.isEmpty()) {
             for (Producto p : listaProductosCarrito) {
                 idProductosCarrito.add(p.getIdProducto());
@@ -91,9 +90,7 @@ public class UtilidadesProducto implements Serializable {
                 if (idProductosCarrito.contains(p.getIdProducto())) {
                     int indexPro = idProductosCarrito.indexOf(p.getIdProducto());
                     p.setCantidad(listaProductosCarrito.get(indexPro).getCantidad());
-                    p.setOrden(orden);
                     nuevaListaProductosCarrito.add(p);
-                    orden++;
                 }
             }
         }
@@ -102,8 +99,10 @@ public class UtilidadesProducto implements Serializable {
 
     public static int cantidadTotalProductosCarrito(List<Producto> listaProductosCarrito) {
         int cantidadTotal = 0;
-        for (Producto p : listaProductosCarrito) {
-            cantidadTotal += p.getCantidad();
+        if (!listaProductosCarrito.isEmpty()) {
+            for (Producto p : listaProductosCarrito) {
+                cantidadTotal += p.getCantidad();
+            }
         }
         return cantidadTotal;
     }
@@ -151,7 +150,7 @@ public class UtilidadesProducto implements Serializable {
         double precioMasAlto = 0;
         if (!listaProductos.isEmpty()) {
             for (Producto p : listaProductos) {
-                precioMasAlto = p.getPrecio()>precioMasAlto? p.getPrecio():precioMasAlto;
+                precioMasAlto = p.getPrecio() > precioMasAlto ? p.getPrecio() : precioMasAlto;
             }
         }
         return precioMasAlto;

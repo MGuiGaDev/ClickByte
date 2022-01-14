@@ -6,7 +6,6 @@
 package es.albarregas.DAO;
 
 import es.albarregas.beans.Producto;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public interface IProductoDAO {
     public ArrayList <Producto> listarProductos();
     public ArrayList <Producto> cargarProductosCarrito(List<Producto> listaProductos);
-    public void closeConnection(Connection conexion);
+    public void closeConnection();
     public Producto cargarProducto (Producto producto);
     public ArrayList<Producto> cargarProductosBuscados(String buscado);
     public ArrayList<Producto> obtenerProductosPorCategoria(Producto producto); 

@@ -14,7 +14,6 @@ import java.io.Serializable;
 public class Producto implements Serializable{
     private short idProducto;
     private short idCategoria;
-    private String nombreCategoria;
     private String nombre;
     private String descripcion;
     private double precio;
@@ -38,15 +37,6 @@ public class Producto implements Serializable{
     public void setIdCategoria(short idCategoria) {
         this.idCategoria = idCategoria;
     }
-
-    public String getNombreCategoria() {
-        return nombreCategoria;
-    }
-
-    public void setNombreCategoria(String nombreCategoria) {
-        this.nombreCategoria = nombreCategoria;
-    }
-
     
     public String getNombre() {
         return nombre;

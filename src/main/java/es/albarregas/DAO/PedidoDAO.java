@@ -5,15 +5,12 @@
  */
 package es.albarregas.DAO;
 
-import es.albarregas.beans.Categoria;
-import java.sql.Connection;
-import java.util.ArrayList;
-
 /**
  *
  * @author Manuel Guillén Gallardo
  */
-public interface ICategoriaDAO {
-    public ArrayList <Categoria> listarCategorias();
-    public void closeConnection();
+public class PedidoDAO implements IPedidoDAO{
+    
+    
+    
 }

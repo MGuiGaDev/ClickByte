@@ -47,7 +47,7 @@ public class GestionarCuentaController extends HttpServlet {
             throws ServletException, IOException {
         String url = "JSP/usuario.jsp";
         if(request.getSession().getAttribute("usuario")== null) {
-            url="JSP/index.jsp";
+            url="FrontController";
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

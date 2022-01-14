@@ -52,9 +52,6 @@ public class IniciarSesionController extends HttpServlet {
         String url = "index.jsp";
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IUsuarioDAO udao = daof.getUsuarioDAO();
-        Cookie[] co = request.getCookies();
-        Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-        Cookie cookieUsuario = null;
         Usuario usuario = null;
         if (request.getParameter("accion") != null) {
             String accion = request.getParameter("accion");
@@ -63,19 +60,8 @@ public class IniciarSesionController extends HttpServlet {
                     request.removeAttribute("mensajeCrearCuenta");
                     break;
                 case "iniciarSesion":
-                    if (cookieAnonimo != null) {
-                        if (!cookieAnonimo.getValue().equals("")) {
-                            cookieUsuario = new Cookie("cookieUsuario", cookieAnonimo.getValue());
-                            cookieAnonimo.setMaxAge(0);
-                            response.addCookie(cookieAnonimo);
-                            cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                            response.addCookie(cookieUsuario);
-                        } else {
-                            cookieUsuario = new Cookie("cookieUsuario", "");
-                            cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                            response.addCookie(cookieUsuario);
-                        }
-                    }
+                    //aquí, si el usuario tiene una cookie de anónimo nos da igual
+                    //
 
                     if (request.getParameter("email") != null) {
                         usuario = new Usuario();
@@ -87,7 +73,6 @@ public class IniciarSesionController extends HttpServlet {
                     }
                     break;
             }
-
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

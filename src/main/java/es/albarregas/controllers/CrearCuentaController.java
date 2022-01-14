@@ -66,7 +66,6 @@ public class CrearCuentaController extends HttpServlet {
         ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = null;
-        Cookie cookieUsuario = null;
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IUsuarioDAO udao = daof.getUsuarioDAO();
         Usuario usuario = new Usuario();
@@ -76,7 +75,7 @@ public class CrearCuentaController extends HttpServlet {
         if (request.getParameter("accion") != null) {
             switch (accion) {
                 case "cancelar":
-                    url = "index.jsp";
+                    url = "FrontController";
                     break;
                 case "crear":
                     try {
@@ -99,11 +98,7 @@ public class CrearCuentaController extends HttpServlet {
                                         cookieAnonimo.setMaxAge(0);
                                         response.addCookie(cookieAnonimo);
                                     }
-                                } else {
-                                    cookieUsuario = new Cookie("cookieUsuario", "");
-                                    cookieUsuario.setMaxAge(60 * 60 * 24 * 2);
-                                    response.addCookie(cookieUsuario);
-                                }
+                                } 
                             }
                         }
                     }

@@ -5,11 +5,13 @@
  */
 package es.albarregas.beans;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Manuel Guillén Gallardo
  */
-public class LineaPedido {
+public class LineaPedido implements Serializable{
 
     private short idLinea;
     private short idProducto;

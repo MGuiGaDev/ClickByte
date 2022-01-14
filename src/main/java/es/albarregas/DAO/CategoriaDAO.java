@@ -6,7 +6,6 @@
 package es.albarregas.DAO;
 
 import es.albarregas.beans.Categoria;
-import es.albarregas.beans.Producto;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,14 +44,14 @@ public class CategoriaDAO implements ICategoriaDAO{
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return listadoCategorias;
     }
 
     @Override
-    public void closeConnection(Connection conexion) {
-        ConnectionFactory.closeConnetion(conexion);
+    public void closeConnection() {
+        ConnectionFactory.closeConnection();
     }
     
 }

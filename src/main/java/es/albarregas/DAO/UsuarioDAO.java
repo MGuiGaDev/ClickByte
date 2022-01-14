@@ -44,7 +44,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return nuevoUsuario;
     }
@@ -73,7 +73,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return nuevoUsuario;
     }
@@ -100,7 +100,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             }
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return creado;
     }
@@ -126,7 +126,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return idUsuario;
     }
@@ -155,7 +155,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             }
 
         } finally {
-            closeConnection(conexion);
+            closeConnection();
         }
         return actualizado;
     }
@@ -165,7 +165,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection conexion = null;
         PreparedStatement busquedaUsuario = null;
         ResultSet res = null;
-        String consulta = "SELECT Password, Nombre, Apellidos, NIF, Telefono, Direccion, CodigoPostal, Localidad, Provincia, UltimoAcceso, avatar from usuarios WHERE email=?;";
+        String consulta = "SELECT Password, Nombre, Apellidos, NIF, Telefono, Direccion, CodigoPostal, Localidad, Provincia, UltimoAcceso, avatar from usuarios WHERE email = ?;";
         
         if (usuario.getEmail() != null) {
             try {
@@ -173,7 +173,7 @@ public class UsuarioDAO implements IUsuarioDAO {
                 conexion = ConnectionFactory.openConnectionMysql();
                 busquedaUsuario = conexion.prepareStatement(consulta);
                 busquedaUsuario.setString(1, usuario.getEmail());
-                res = busquedaUsuario.executeQuery(consulta);
+                res = busquedaUsuario.executeQuery();
                 while (res.next()) {
                 usuario.setPassword(res.getString(1));
                 usuario.setNombre(res.getString(2));
@@ -190,7 +190,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
-                closeConnection(conexion);
+                closeConnection();
             }
         }
         return usuario;
@@ -198,8 +198,8 @@ public class UsuarioDAO implements IUsuarioDAO {
     
 
     @Override
-    public void closeConnection(Connection conexion) {
-        ConnectionFactory.closeConnetion(conexion);
+    public void closeConnection() {
+        ConnectionFactory.closeConnection();
     }
 
     

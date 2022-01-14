@@ -7,9 +7,13 @@ package es.albarregas.DAOFactory;
 
 import es.albarregas.DAO.CategoriaDAO;
 import es.albarregas.DAO.ICategoriaDAO;
+import es.albarregas.DAO.ILineaPedidoDAO;
+import es.albarregas.DAO.IPedidoDAO;
 import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAO.ProductoDAO;
 import es.albarregas.DAO.IUsuarioDAO;
+import es.albarregas.DAO.LineaPedidoDAO;
+import es.albarregas.DAO.PedidoDAO;
 import es.albarregas.DAO.UsuarioDAO;
 
 /**
@@ -31,5 +35,15 @@ public class MysqlDAOFactory extends DAOFactory{
     @Override
     public ICategoriaDAO getCategoriaDAO() {
         return new CategoriaDAO();
+    }
+
+    @Override
+    public IPedidoDAO getPedidoDAO() {
+        return new PedidoDAO();
+    }
+
+    @Override
+    public ILineaPedidoDAO getLineaPedidoDAO() {
+        return new LineaPedidoDAO();
     }
 }

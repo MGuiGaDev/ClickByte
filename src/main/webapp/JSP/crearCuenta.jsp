@@ -20,7 +20,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body>
-        <form action="${contexto}/CrearCuentaController" method="post" class="form" enctype="multipart/form-data">
+        <form action="../CrearCuentaController" method="post" class="form" enctype="multipart/form-data">
             <div class="form__header">
                 <h1>CREAR CUENTA</h1>
             </div>

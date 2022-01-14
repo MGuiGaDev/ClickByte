@@ -51,7 +51,7 @@
                         <div class="mas__buscados">
                             <h2>LO MÁS BUSCADO</h2>
                             <div>
-                                <button name="accion" value="portátil" class="btn__mb">Portátil</button> <button name="accion" value="tablet" class="btn__mb">Tablet</button> <button name="accion" value="mac" class="btn__mb">Mac</button> <button name="accion" value="placa" class="btn__mb">Placa</button>
+                                <button name="accion" value="mac" class="btn__mb">Mac</button> <button name="accion" value="placa" class="btn__mb">Placa</button>
                             </div>
                         </div>
                     </div>
@@ -177,8 +177,9 @@
                         <c:choose>
                             <c:when test="${sessionScope.usuario!=null}">
                                 <form action="GestionarCuentaController" method="POST">
-                                    <button class="nav__item__button" title="Mi Cuenta" id="open__modal__login">
+                                    <button class="nav__item__button btn__usuario" title="Mi Cuenta" id="open__modal__login">
                                         <img src="${contexto}/IMAGENES/AVATARES/${usuario.avatar}" class="avatar__usuario"/>
+                                        <p><c:out value="${usuario.nombre}"/></p>
                                     </button>  
                                 </form>
                             </c:when>

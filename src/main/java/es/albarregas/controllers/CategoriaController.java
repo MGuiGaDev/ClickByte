@@ -53,20 +53,26 @@ public class CategoriaController extends HttpServlet {
             throws ServletException, IOException {
         String url = "JSP/categoria.jsp";
         List<Producto> listaProductosIdCategoria = new ArrayList<>();
+        ArrayList<Categoria> listaCategorias = null;
         Producto producto = null;
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IProductoDAO ipd = daof.getProductoDAO();
+
         if (request.getParameter("categoria") != null) {
-            String idCategoria = request.getParameter("categoria");
             producto = new Producto();
-            producto.setIdCategoria(Short.parseShort(idCategoria));
+            producto.setIdCategoria(Short.parseShort(request.getParameter("categoria")));
             listaProductosIdCategoria = ipd.obtenerProductosPorCategoria(producto);
-            String nombreCategoria = UtilidadesCategoria.obtenerNombreCategoria(Short.parseShort(idCategoria), (ArrayList<Categoria>) request.getSession().getAttribute("listaCategorias"));
-            if (!listaProductosIdCategoria.isEmpty()) {
-                request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
-                request.setAttribute("nombreCategoria", nombreCategoria);
+            if (request.getSession().getAttribute("listaCategorias") != null) {
+                listaCategorias = (ArrayList<Categoria>) request.getSession().getAttribute("listaCategorias");
+                if (!listaCategorias.isEmpty() && !listaProductosIdCategoria.isEmpty()) {
+                    String nombreCategoria = UtilidadesCategoria.obtenerNombreCategoria(producto.getIdCategoria(), listaCategorias);
+                    request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
+                    request.setAttribute("nombreCategoria", nombreCategoria);
+                }
             }
+
         }
+
         request.getRequestDispatcher(url).forward(request, response);
     }
 

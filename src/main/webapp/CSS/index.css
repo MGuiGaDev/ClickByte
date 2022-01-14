@@ -74,7 +74,7 @@ header{
     background: transparent;
 }
 .clickbyte__title {
-    font-size: 40px;
+    font-size: 60px;
     font-weight: 900;
     letter-spacing: 2px;
     color: var(--c-primary);
@@ -125,13 +125,17 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     border: none;
     cursor: pointer;
     color: var(--c-primary);
-    height: 70px;
+    height: 90px;
     transition: .2s ease;
     justify-content: center;
-    width: 70px;
+    width: 90px;
     font-size: 20px;
     font-weight: bolder;
     background: transparent;
+}
+.btn__usuario {
+    display:flex;
+    flex-direction: column;
 }
 .avatar__usuario {
     width: 50%;
@@ -139,6 +143,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     border-radius: 50%;
     border: 1px solid white;
 }
+
 .nav__item__button:hover {
     background: var(--c-primary);
     color: white;
@@ -159,7 +164,7 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 main {
     display: flex;
     flex-direction: column;
-    margin-top: 70px;
+    margin-top: 90px;
     width: 100%;
 }
 .container__menu {

@@ -6,6 +6,8 @@
 package es.albarregas.DAOFactory;
 
 import es.albarregas.DAO.ICategoriaDAO;
+import es.albarregas.DAO.ILineaPedidoDAO;
+import es.albarregas.DAO.IPedidoDAO;
 import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAO.IUsuarioDAO;
 
@@ -20,16 +22,14 @@ public abstract class DAOFactory {
     public abstract IUsuarioDAO getUsuarioDAO();
     public abstract IProductoDAO getProductoDAO();
     public abstract ICategoriaDAO getCategoriaDAO();
+    public abstract IPedidoDAO getPedidoDAO();
+    public abstract ILineaPedidoDAO getLineaPedidoDAO();
     
     public static DAOFactory getDAOFactory (int tipo) {
-        DAOFactory daof =null;
-        //De momento esto lo trampeo porque no se si buscare files por aqui
-        tipo = 1;
+        DAOFactory daof =new MysqlDAOFactory();
         switch(tipo) {
             case 1:
                 daof = new MysqlDAOFactory();
-                break;
-            case 2:
                 break;
         }
         return daof;

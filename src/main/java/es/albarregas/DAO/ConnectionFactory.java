@@ -19,26 +19,25 @@ import javax.sql.DataSource;
 public class ConnectionFactory {
 
     private static Connection conexion = null;
-    private static final String DATASOURCE_NAME_MYSQL = "java:comp/env/jdbc/clickbyte";
-    //¿otro?
+    private static final String DATASOURCE_NAME_MYSQL = "java:comp/env/jdbc/PoolClickbyte";
     
-    public static Connection openConnectionMysql(){
-        
+
+    public static Connection openConnectionMysql() {
+
         try {
-            
             Context initialContext = new InitialContext();
-            DataSource datasource = (DataSource) initialContext.lookup(DATASOURCE_NAME_MYSQL);
-            conexion = (Connection) datasource.getConnection();
-            
-        } catch(SQLException | NamingException sE) {
+            DataSource ds = (DataSource) initialContext.lookup(DATASOURCE_NAME_MYSQL);
+            conexion = (Connection) ds.getConnection();
+
+        } catch (SQLException | NamingException sE) {
             sE.printStackTrace();
         }
         return conexion;
     }
-    
-    public static void closeConnetion(Connection conexion) {
+
+    public static void closeConnection() {
         try {
-            conexion.close();
+                conexion.close();
         } catch (SQLException | NullPointerException ex) {
             ex.printStackTrace();
         }

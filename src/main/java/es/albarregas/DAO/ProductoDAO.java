@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,7 +29,7 @@ public class ProductoDAO implements IProductoDAO {
         Connection conexion = null;
         Statement productosST = null;
         ResultSet productoRS = null;
-        String consulta = "SELECT p.idProducto, p.IdCategoria, p.nombre, c.nombre, p.descripcion, p.precio, p.marca, p.imagen from productos p inner join categorias c using (IdCategoria);";
+        String consulta = "SELECT p.idProducto, p.IdCategoria, p.nombre, p.descripcion, p.precio, p.marca, p.imagen from productos p inner join categorias c using (IdCategoria);";
 
         try {
             ConnectionFactory.openConnectionMysql();
@@ -39,11 +41,10 @@ public class ProductoDAO implements IProductoDAO {
                 producto.setIdProducto(productoRS.getShort(1));
                 producto.setIdCategoria(productoRS.getShort(2));
                 producto.setNombre(productoRS.getString(3));
-                producto.setNombreCategoria(productoRS.getString(4));
-                producto.setDescripcion(productoRS.getString(5));
-                producto.setPrecio(productoRS.getDouble(6));
-                producto.setMarca(productoRS.getString(7));
-                producto.setDireccionImagen(productoRS.getString(8));
+                producto.setDescripcion(productoRS.getString(4));
+                producto.setPrecio(productoRS.getDouble(5));
+                producto.setMarca(productoRS.getString(6));
+                producto.setDireccionImagen(productoRS.getString(7));
                 listadoProductos.add(producto);
             }
         } catch (SQLException ex) {
@@ -51,7 +52,13 @@ public class ProductoDAO implements IProductoDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            try {
+                productosST.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return listadoProductos;
     }
@@ -86,7 +93,13 @@ public class ProductoDAO implements IProductoDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            try {
+                productoPT.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         return nuevoProducto;
@@ -123,7 +136,7 @@ public class ProductoDAO implements IProductoDAO {
                 producto.setPrecio(productoRS.getDouble(5));
                 producto.setMarca(productoRS.getString(6));
                 producto.setDireccionImagen(productoRS.getString(7));
-                
+                //contador + arraylist get index
                 for(Producto p : listaProductosCarrito) {
                     if(producto.getIdProducto() == p.getIdProducto()){
                         producto.setCantidad(p.getCantidad());
@@ -136,7 +149,13 @@ public class ProductoDAO implements IProductoDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            try {
+                productosST.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return listaProductos;
     }
@@ -171,7 +190,13 @@ public class ProductoDAO implements IProductoDAO {
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            try {
+                productosPS.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return productosBuscados;
     }
@@ -201,18 +226,23 @@ public class ProductoDAO implements IProductoDAO {
                 listaProductosPorCategoria.add(producto);
             }
         } catch (SQLException ex) {
-
             System.out.println("Fallo en la conexión.");
 
         } finally {
-            closeConnection(conexion);
+            try {
+                productosPS.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return listaProductosPorCategoria;
     }
     
     @Override
-    public void closeConnection(Connection conexion) {
-        ConnectionFactory.closeConnetion(conexion);
+    public void closeConnection() {
+        ConnectionFactory.closeConnection();
     }
 
 }
