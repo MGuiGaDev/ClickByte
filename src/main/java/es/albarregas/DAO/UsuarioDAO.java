@@ -30,7 +30,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         String consulta = "SELECT email FROM usuarios WHERE email=? AND password=MD5('"+ password +"');";
 
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             usuarioPs = conexion.prepareStatement(consulta);
             usuarioPs.setString(1, usuario.getEmail());
@@ -59,7 +58,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         String consulta = "SELECT email FROM usuarios WHERE email=?";
 
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             usuarioPs = conexion.prepareStatement(consulta);
             usuarioPs.setString(1, usuario.getEmail());
@@ -84,7 +82,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection conexion = null;
         Statement crearUsuario = null;
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             conexion.setAutoCommit(false);
             crearUsuario = conexion.createStatement();
@@ -114,7 +111,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         String consulta = "SELECT MAX(idUsuario) FROM usuarios;";
 
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             sT = conexion.createStatement();
             res = sT.executeQuery(consulta);
@@ -137,7 +133,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         Connection conexion = null;
         PreparedStatement usuarioAvatar = null;
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             conexion.setAutoCommit(false);
             usuarioAvatar = conexion.prepareStatement("UPDATE usuarios SET avatar=? WHERE idUsuario=?;");
@@ -169,7 +164,6 @@ public class UsuarioDAO implements IUsuarioDAO {
         
         if (usuario.getEmail() != null) {
             try {
-                ConnectionFactory.openConnectionMysql();
                 conexion = ConnectionFactory.openConnectionMysql();
                 busquedaUsuario = conexion.prepareStatement(consulta);
                 busquedaUsuario.setString(1, usuario.getEmail());

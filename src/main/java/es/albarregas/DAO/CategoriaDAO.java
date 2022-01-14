@@ -27,7 +27,6 @@ public class CategoriaDAO implements ICategoriaDAO{
         String consulta = "SELECT IdCategoria, c.nombre, c.imagen  from categorias c inner join productos using (IdCategoria) group by IdCategoria order by nombre;";
 
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productosST = conexion.createStatement();
             productoRS = productosST.executeQuery(consulta);

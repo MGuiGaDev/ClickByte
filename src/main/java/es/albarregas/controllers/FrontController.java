@@ -36,14 +36,8 @@ public class FrontController extends HttpServlet {
         List<Categoria> listaCategorias = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-
-        if (request.getSession().getAttribute("listaCategorias") == null && request.getParameter("volver") == null) {
-            DAOFactory daof = DAOFactory.getDAOFactory(1);
-            ICategoriaDAO icd = daof.getCategoriaDAO();
-            listaCategorias = icd.listarCategorias();
-            request.getSession().setAttribute("listaCategorias", listaCategorias);
-            request.getSession().setAttribute("dirImagen", "/IMAGENES/AVATARES/");
-        }
+        //Posible solución, traer las categorías con AJAX
+        //request.getSession().setAttribute("dirImagen", "/IMAGENES/AVATARES/");
 
         if (request.getSession().getAttribute("listaProductosCarrito") == null && cookieAnonimo != null) {
             if (!cookieAnonimo.getValue().equals("")) {

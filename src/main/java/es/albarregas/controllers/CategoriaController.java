@@ -13,6 +13,7 @@ import es.albarregas.models.UtilidadesCategoria;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -62,13 +63,12 @@ public class CategoriaController extends HttpServlet {
             IProductoDAO ipd = daof.getProductoDAO();
             producto.setIdCategoria(Short.parseShort(request.getParameter("categoria")));
             listaProductosIdCategoria = ipd.obtenerProductosPorCategoria(producto);
-            if (request.getSession().getAttribute("listaCategorias") != null) {
-                listaCategorias = (ArrayList<Categoria>) request.getSession().getAttribute("listaCategorias");
-                if (!listaCategorias.isEmpty() && !listaProductosIdCategoria.isEmpty()) {
-                    String nombreCategoria = UtilidadesCategoria.obtenerNombreCategoria(producto.getIdCategoria(), listaCategorias);
-                    request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
-                    request.setAttribute("nombreCategoria", nombreCategoria);
-                }
+            ServletContext contexto = getServletContext();
+            listaCategorias = (ArrayList<Categoria>) contexto.getAttribute("listaCategorias");
+            if (!listaCategorias.isEmpty() && !listaProductosIdCategoria.isEmpty()) {
+                String nombreCategoria = UtilidadesCategoria.obtenerNombreCategoria(producto.getIdCategoria(), listaCategorias);
+                request.setAttribute("listaProductosIdCategoria", listaProductosIdCategoria);
+                request.setAttribute("nombreCategoria", nombreCategoria);
             }
 
         }

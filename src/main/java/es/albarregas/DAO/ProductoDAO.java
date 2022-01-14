@@ -32,7 +32,6 @@ public class ProductoDAO implements IProductoDAO {
         String consulta = "SELECT p.idProducto, p.IdCategoria, p.nombre, p.descripcion, p.precio, p.marca, p.imagen from productos p inner join categorias c using (IdCategoria);";
 
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productosST = conexion.createStatement();
             productoRS = productosST.executeQuery(consulta);
@@ -70,7 +69,6 @@ public class ProductoDAO implements IProductoDAO {
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, idCategoria, nombre, descripcion, precio, marca, imagen from productos where idProducto =?;";
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productoPT = conexion.prepareStatement(consulta);
             productoPT.setShort(1, producto.getIdProducto());
@@ -121,7 +119,6 @@ public class ProductoDAO implements IProductoDAO {
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where idProducto in ("+listaIdProductos.toString()+");";
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productosST = conexion.createStatement();
             productoRS = productosST.executeQuery(consulta);
@@ -167,7 +164,6 @@ public class ProductoDAO implements IProductoDAO {
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where descripcion like "+busquedaPreparada+" or nombre like "+busquedaPreparada+";";
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productosPS = conexion.createStatement();
             productoRS = productosPS.executeQuery(consulta);
@@ -205,7 +201,6 @@ public class ProductoDAO implements IProductoDAO {
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where idCategoria = ?;";
         try {
-            ConnectionFactory.openConnectionMysql();
             conexion = ConnectionFactory.openConnectionMysql();
             productosPS = conexion.prepareStatement(consulta);
             productosPS.setShort(1, productoBuscado.getIdCategoria());

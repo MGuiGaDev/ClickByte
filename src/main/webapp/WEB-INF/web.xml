@@ -14,4 +14,7 @@
             FrontController
         </welcome-file>
     </welcome-file-list>
+    <listener>
+        <listener-class>es.albarregas.eventos.ClickByteListener</listener-class>
+    </listener>
 </web-app>

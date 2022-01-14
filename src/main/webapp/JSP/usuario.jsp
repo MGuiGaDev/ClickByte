@@ -32,7 +32,7 @@
                 <!-- MODAL SIMULADO -->
                 <form id="modal__menu" class="modal__menu" action="CategoriaController" method="POST">
                     <ul class="menu__list" id="menu__list">
-                        <c:forEach var="categoria" items="${sessionScope.listaCategorias}">
+                        <c:forEach var="categoria" items="${listaCategorias}">
                             <li>
                                 <button type="submit" name="categoria" value="${categoria.idCategoria}">${categoria.nombre}</button>   
                             </li>
