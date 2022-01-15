@@ -5,6 +5,7 @@
  */
 package es.albarregas.models;
 
+import es.albarregas.beans.ListaCesta;
 import es.albarregas.beans.Producto;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,14 +34,14 @@ public class UtilidadesCookie implements Serializable {
         return cookieEncontrada;
     }
 
-    public static Cookie cargarCookie(List<Producto> listaProductosCarrito) {
+    public static Cookie cargarCookie(ArrayList<ListaCesta> listaProductosCesta) {
         StringBuilder listado = new StringBuilder();
         Cookie cookie = new Cookie("cookieAnonimo", "");
         int count = 0;
-        for (Producto pro : listaProductosCarrito) {
+        for (ListaCesta lC : listaProductosCesta) {
             count++;
-            listado.append(pro.getIdProducto()).append("-").append(pro.getCantidad());
-            if (count < listaProductosCarrito.size()) {
+            listado.append(lC.getIdProducto()).append("-").append(lC.getCantidad());
+            if (count < listaProductosCesta.size()) {
                 listado.append("#");
             }
         }
@@ -48,18 +49,18 @@ public class UtilidadesCookie implements Serializable {
         return cookie;
     }
 
-    public static ArrayList<Producto> cargarListaProductos(Cookie coo) {
-        Producto productoCarrito = null;
-        ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
+    public static ArrayList<ListaCesta> cargarListaProductos(Cookie coo) {
+        ListaCesta lC = null;
+        ArrayList<ListaCesta> listaProductosCesta = new ArrayList<>();
         String[] datosCookie = coo.getValue().split("#");
         for (String i : datosCookie) {
             String[] productoCookie = i.split("-");
-            productoCarrito = new Producto();
-            productoCarrito.setIdProducto(Short.parseShort(productoCookie[0]));
-            productoCarrito.setCantidad(Short.parseShort(productoCookie[1]));
-            listaProductosCarrito.add(productoCarrito);
+            lC = new ListaCesta();
+            lC.setIdProducto(Short.parseShort(productoCookie[0]));
+            lC.setCantidad(Short.parseShort(productoCookie[1]));
+            listaProductosCesta.add(lC);
         }
-        return listaProductosCarrito;
+        return listaProductosCesta;
     }
     public static String obtenerIdProductosCarrito(Cookie coo) {
         String[] datosCookie = coo.getValue().split("#");

@@ -97,16 +97,6 @@ public class UtilidadesProducto implements Serializable {
         return nuevaListaProductosCarrito;
     }
 
-    public static int cantidadTotalProductosCarrito(List<Producto> listaProductosCarrito) {
-        int cantidadTotal = 0;
-        if (!listaProductosCarrito.isEmpty()) {
-            for (Producto p : listaProductosCarrito) {
-                cantidadTotal += p.getCantidad();
-            }
-        }
-        return cantidadTotal;
-    }
-
     public static Producto obtenerProductoParaCarrito(List<Producto> listaProductos, short idProducto) {
         Producto producto = new Producto();
         if (!listaProductos.isEmpty()) {
@@ -118,16 +108,6 @@ public class UtilidadesProducto implements Serializable {
             }
         }
         return producto;
-    }
-
-    public static double calcularTotal(List<Producto> listaProductosCarrito) {
-        double total = 0;
-        if (!listaProductosCarrito.isEmpty()) {
-            for (Producto p : listaProductosCarrito) {
-                total += p.getCantidad() * p.getPrecio();
-            }
-        }
-        return total;
     }
 
     public static ArrayList<String> filtroPorMarca(List<Producto> listaProductos) {

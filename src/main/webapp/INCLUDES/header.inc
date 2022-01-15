@@ -78,11 +78,11 @@
             </div>
             <div class="carrito__body" id="carrito__body">
                 <c:choose>
-                    <c:when test="${sessionScope.listaProductosCarrito!=null}">
-                        <c:forEach var="productoCarrito" items="${listaProductosCarrito}">
+                    <c:when test="${sessionScope.listaProductosCesta!=null}">
+                        <c:forEach var="productoCarrito" items="${listaProductosCesta}">
                             <div class="container__producto__carrito" data-idProducto="${productoCarrito.idProducto}">
                                 <div class="container__producto__carrito__img">
-                                    <img src="IMAGENES/APP/productos/${productoCarrito.direccionImagen}.jpg" class="producto__carrito__img">
+                                    <img src="IMAGENES/APP/productos/${productoCarrito.nombreImagen}.jpg" class="producto__carrito__img">
                                 </div>
                                 <div class="descripcion__producto__carrito">
                                     <p class="producto__carrito__nombre"><c:out value="${productoCarrito.nombre}" /></p>
@@ -103,26 +103,26 @@
                                         </div>
                                     </div>
                                     <br>
-                                    <p class="producto__carrito__precio">Importe unidad: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio}" /></p>
-                                    <p class="producto__carrito__precio">Importe total: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precio*productoCarrito.cantidad}" /></p>
+                                    <p class="producto__carrito__precio">Importe unidad: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precioUnitario}" /></p>
+                                    <p class="producto__carrito__precio">Importe total: <fmt:formatNumber type="currency" minFractionDigits="2" value="${productoCarrito.precioUnitario*productoCarrito.cantidad}" /></p>
                                 </div>
                             </div>
                         </c:forEach>
                     </c:when>
-                    <c:when test="${sessionScope.listaProductosCarrito==null}">
+                    <c:when test="${sessionScope.listaProductosCesta==null}">
                         <h2>El carrito est&aacute; vac&iacute;o</h2>
                     </c:when>
                 </c:choose>
             </div>
             <div class="carrito__footer" id="carrito__footer">
-                <c:if test="${sessionScope.cantidadProductosCarrito!=null && sessionScope.totalCarrito!=null}">
+                <c:if test="${sessionScope.cantidadProductosCesta!=null && sessionScope.totalCesta!=null}">
                     <div class="container__total__unidades">
                         <p>Unidades:</p>
-                        <p id="total__productos"><c:out value="${cantidadProductosCarrito}"/></p>
+                        <p id="total__productos"><c:out value="${cantidadProductosCesta}"/></p>
                     </div>
                     <div class="container__total">
                         <p>Total: </p>
-                        <p id="total__carrito"><fmt:formatNumber type="currency" minFractionDigits="2"  value="${totalCarrito}"/></p>
+                        <p id="total__carrito"><fmt:formatNumber type="currency" minFractionDigits="2"  value="${totalCesta}"/></p>
                     </div>
                     <form action="FinalizarCarritoController" method="POST" class="acciones__carrito">
                         <span class="material-icons accion__carrito" id="eliminar__carrito">delete</span>
@@ -171,10 +171,10 @@
                     <span class="material-icons">shopping_cart</span>
                     <span class="count__products" id="count__producto">
                         <c:choose>
-                            <c:when test="${cantidadProductosCarrito!=null}">
-                                <c:out value="${cantidadProductosCarrito}"/>
+                            <c:when test="${cantidadProductosCesta!=null}">
+                                <c:out value="${cantidadProductosCesta}"/>
                             </c:when>
-                            <c:when test="${cantidadProductosCarrito==null}">
+                            <c:when test="${cantidadProductosCesta==null}">
                                 <c:out value="0"/>
                             </c:when>
                         </c:choose>

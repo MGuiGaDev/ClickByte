@@ -5,16 +5,13 @@
  */
 package es.albarregas.controllers;
 
-import es.albarregas.DAO.ICategoriaDAO;
 import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAOFactory.DAOFactory;
-import es.albarregas.beans.Categoria;
-import es.albarregas.beans.Producto;
+import es.albarregas.beans.ListaCesta;
 import es.albarregas.models.UtilidadesCookie;
-import es.albarregas.models.UtilidadesProducto;
+import es.albarregas.models.UtilidadesListaCesta;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -32,29 +29,29 @@ public class FrontController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "index.jsp";
-        List<Producto> listaProductosCarrito = new ArrayList<>();
-        List<Categoria> listaCategorias = new ArrayList<>();
+        ArrayList<ListaCesta> listaProductosCesta = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-        //Posible solución, traer las categorías con AJAX
-        //request.getSession().setAttribute("dirImagen", "/IMAGENES/AVATARES/");
 
-        if (request.getSession().getAttribute("listaProductosCarrito") == null && cookieAnonimo != null) {
-            if (!cookieAnonimo.getValue().equals("")) {
-                listaProductosCarrito = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
-                if (!listaProductosCarrito.isEmpty()) {
+        if (request.getParameter("volver")==null) {
+            if (cookieAnonimo!=null) {
+                listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
+                if (!listaProductosCesta.isEmpty()) {
                     DAOFactory daof = DAOFactory.getDAOFactory(1);
                     IProductoDAO ipd = daof.getProductoDAO();
-                    listaProductosCarrito = ipd.cargarProductosCarrito(listaProductosCarrito);
-                    int cantidadProductosCarrito = UtilidadesProducto.cantidadTotalProductosCarrito(listaProductosCarrito);
-                    double totalCarrito = UtilidadesProducto.calcularTotal(listaProductosCarrito);
-                    request.getSession().setAttribute("listaProductosCarrito", listaProductosCarrito);
-                    request.getSession().setAttribute("cantidadProductosCarrito", cantidadProductosCarrito);
-                    request.getSession().setAttribute("totalCarrito", totalCarrito);
+                    listaProductosCesta = ipd.cargarProductosCarrito(listaProductosCesta);
+                    int cantidadProductosCesta = UtilidadesListaCesta.cantidadTotalProductosCesta(listaProductosCesta);
+                    double total = UtilidadesListaCesta.calcularTotal(listaProductosCesta);
+                    request.getSession().setAttribute("listaProductosCarrito", listaProductosCesta);
+                    request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
+                    request.getSession().setAttribute("totalCarrito", total);
                 }
                 cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
                 response.addCookie(cookieAnonimo);
             }
+        }
+        if(request.getSession().getAttribute("usuario")!=null) {
+            
         }
         request.getRequestDispatcher(url).forward(request, response);
 

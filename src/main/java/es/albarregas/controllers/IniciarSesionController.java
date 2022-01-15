@@ -60,8 +60,8 @@ public class IniciarSesionController extends HttpServlet {
                     request.removeAttribute("mensajeCrearCuenta");
                     break;
                 case "iniciarSesion":
-                    //aquí, si el usuario tiene una cookie de anónimo nos da igual
-                    //
+                    //aquí, si el usuario tiene una cookie de anónimo nos da igual => reventarla
+                    //debo comprobar última compra realizada y en caso de que exista la paso a sesión
 
                     if (request.getParameter("email") != null) {
                         usuario = new Usuario();

@@ -7,6 +7,7 @@ package es.albarregas.controllers;
 
 import es.albarregas.DAO.IUsuarioDAO;
 import es.albarregas.DAOFactory.DAOFactory;
+import es.albarregas.beans.ListaCesta;
 import es.albarregas.beans.Producto;
 import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
@@ -62,8 +63,8 @@ public class CrearCuentaController extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "FrontController";
-        Producto productoCarrito = null;
-        ArrayList<Producto> listaProductosCarrito = new ArrayList<>();
+        //Producto productoCesta = null;
+        ArrayList<ListaCesta> listaProductosCesta = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = null;
         DAOFactory daof = DAOFactory.getDAOFactory(1);
@@ -94,7 +95,8 @@ public class CrearCuentaController extends HttpServlet {
                                 cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
                                 if (cookieAnonimo != null) {
                                     if (!cookieAnonimo.getValue().equals("")) {
-                                        listaProductosCarrito = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
+                                        listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
+                                        //cargarConPedido
                                         cookieAnonimo.setMaxAge(0);
                                         response.addCookie(cookieAnonimo);
                                     }

@@ -5,6 +5,7 @@
  */
 package es.albarregas.DAO;
 
+import es.albarregas.beans.ListaCesta;
 import es.albarregas.beans.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -102,58 +103,6 @@ public class ProductoDAO implements IProductoDAO {
         return nuevoProducto;
     }
     
-    @Override
-    public ArrayList<Producto> cargarProductosCarrito(List<Producto> listaProductosCarrito) {
-        ArrayList<Producto> listaProductos = new ArrayList<>();
-        Producto producto = null;
-        StringBuilder listaIdProductos = new StringBuilder();
-        int count = 0;
-        for (Producto p : listaProductosCarrito) {
-            count++;
-            listaIdProductos.append(p.getIdProducto());
-            if (count < listaProductosCarrito.size()) {
-                listaIdProductos.append(",");
-            }
-        }
-        Statement productosST = null;
-        ResultSet productoRS = null;
-        String consulta = "SELECT idProducto, IdCategoria, nombre, descripcion, precio, marca, imagen from productos where idProducto in ("+listaIdProductos.toString()+");";
-        try {
-            conexion = ConnectionFactory.openConnectionMysql();
-            productosST = conexion.createStatement();
-            productoRS = productosST.executeQuery(consulta);
-            while (productoRS.next()) {
-                producto = new Producto();
-                producto.setIdProducto(productoRS.getShort(1));
-                producto.setIdCategoria(productoRS.getShort(2));
-                producto.setNombre(productoRS.getString(3));
-                producto.setDescripcion(productoRS.getString(4));
-                producto.setPrecio(productoRS.getDouble(5));
-                producto.setMarca(productoRS.getString(6));
-                producto.setDireccionImagen(productoRS.getString(7));
-                //contador + arraylist get index
-                for(Producto p : listaProductosCarrito) {
-                    if(producto.getIdProducto() == p.getIdProducto()){
-                        producto.setCantidad(p.getCantidad());
-                    }
-                }
-                listaProductos.add(producto);
-            }
-        } catch (SQLException ex) {
-
-            System.out.println("Fallo en la conexión.");
-
-        } finally {
-            try {
-                productosST.close();
-                productoRS.close();
-                closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return listaProductos;
-    }
 
     @Override
     public ArrayList<Producto> cargarProductosBuscados(String buscado) {
@@ -234,6 +183,55 @@ public class ProductoDAO implements IProductoDAO {
     @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
+    }
+
+    @Override
+    public ArrayList<ListaCesta> cargarProductosCarrito(ArrayList<ListaCesta> listaProductosCesta) {
+        ListaCesta listaCesta = null;
+        StringBuilder listaIdProductos = new StringBuilder();
+        int count = 0;
+        for (ListaCesta lC : listaProductosCesta) {
+            count++;
+            listaIdProductos.append(lC.getIdProducto());
+            if (count < listaProductosCesta.size()) {
+                listaIdProductos.append(",");
+            }
+        }
+        Statement productosST = null;
+        ResultSet productoRS = null;
+        String consulta = "SELECT idProducto, nombre, precio, marca, imagen from productos where idProducto in ("+listaIdProductos.toString()+");";
+        try {
+            conexion = ConnectionFactory.openConnectionMysql();
+            productosST = conexion.createStatement();
+            productoRS = productosST.executeQuery(consulta);
+            while (productoRS.next()) {
+                listaCesta = new ListaCesta();
+                listaCesta.setIdProducto(productoRS.getShort(1));
+                listaCesta.setNombre(productoRS.getString(2));
+                listaCesta.setPrecioUnitario(productoRS.getDouble(3));
+                listaCesta.setMarca(productoRS.getString(4));
+                listaCesta.setNombreImagen(productoRS.getString(5));
+                for(ListaCesta lC : listaProductosCesta) {
+                    if(listaCesta.getIdProducto() == lC.getIdProducto()){
+                        listaCesta.setCantidad(lC.getCantidad());
+                    }
+                }
+                listaProductosCesta.add(listaCesta);
+            }
+        } catch (SQLException ex) {
+
+            System.out.println("Fallo en la conexión.");
+
+        } finally {
+            try {
+                productosST.close();
+                productoRS.close();
+                closeConnection();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return listaProductosCesta;
     }
 
 }
