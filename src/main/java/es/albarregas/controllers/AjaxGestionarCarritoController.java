@@ -5,19 +5,21 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.ILineaPedidoDAO;
+import es.albarregas.DAO.IPedidoDAO;
 import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.LineaPedido;
-import es.albarregas.beans.ListaCesta;
+import es.albarregas.beans.LineaCesta;
 import es.albarregas.beans.Pedido;
 import es.albarregas.beans.Producto;
+import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
-import es.albarregas.models.UtilidadesListaCesta;
-import es.albarregas.models.UtilidadesProducto;
+import es.albarregas.models.UtilidadesLineaCesta;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -61,151 +63,220 @@ public class AjaxGestionarCarritoController extends HttpServlet {
 
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IProductoDAO ipd = daof.getProductoDAO();
-        response.setContentType("text/html;charset=UTF-8");
+        IPedidoDAO iped = daof.getPedidoDAO();
+        ILineaPedidoDAO ilpd = daof.getLineaPedidoDAO();
         String accion = request.getParameter("accion");
         JSONObject objeto = null;
 
-        Cookie[] co = request.getCookies();
-        Cookie cookieAnonimo = null;
+        //Esta variable nos sirve para determinar en caso de que exista atributo de sesión "usuario"
+        //qué tipo de acción vamos a realizar en la BBDD:
+        //1. "insertar"
+        //2. "actualizar"
+        //3. "crear"
+        //3. "eliminarLinea"
+        //4. "eliminarPedido"
+        String tipoAccion = "";
+        //nos sirve para saber si se ha eliminado una lineaCesta, en cuyo caso se restara
+        //1 al atributo "orden" de los productos posteriores
+        boolean remove = false;
 
-        ArrayList<ListaCesta> listaProductosCesta = new ArrayList<>();
+        Cookie[] co = request.getCookies();
+        Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
+
+        ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
         Pedido pedido = new Pedido();
-        ArrayList<LineaPedido> lineaPedido = new ArrayList<>();
-        ListaCesta listaCesta = new ListaCesta();
+        LineaPedido lineaPedido = new LineaPedido();
+        //ArrayList<LineaPedido> coleccionLineasPedido = new ArrayList<>();
+        LineaCesta lineaCesta = new LineaCesta();
         Producto producto = new Producto();
+        Usuario usuario = new Usuario();
 
         if (request.getSession().getAttribute("listaProductosCesta") != null) {
-            listaProductosCesta = (ArrayList<ListaCesta>) request.getSession().getAttribute("listaProductosCesta");
+            listaProductosCesta = (ArrayList<LineaCesta>) request.getSession().getAttribute("listaProductosCesta");
+            Collections.sort(listaProductosCesta);
         }
 
         int cantidadProductosCesta = 0;
         double total = 0;
 
         if (request.getParameter("accion") != null) {
+            if (request.getParameter("id") != null) {
+                producto.setIdProducto(Short.parseShort(request.getParameter("id")));
+            }
             switch (accion) {
                 case "nuevoProducto":
                     if (request.getParameter("id") != null) {
-                        producto.setIdProducto(Short.parseShort(request.getParameter("id")));
                         if (!listaProductosCesta.isEmpty()) {
                             boolean esta = false;
-                            for (ListaCesta lC : listaProductosCesta) {
+                            for (LineaCesta lC : listaProductosCesta) {
                                 if (lC.getIdProducto() == producto.getIdProducto()) {
-                                    //pro.setCantidad((short) (pro.getCantidad() + 1));
-                                    listaCesta = new ListaCesta();
-                                    listaCesta = lC;
+                                    lineaCesta.setCantidad((short) ((short) lC.getCantidad() + 1));
+                                    lineaCesta.setOrden((short) ((short) listaProductosCesta.size() + 1));
+                                    lineaCesta = lC;
                                     esta = true;
+                                    tipoAccion = "actualizar";
                                 }
                             }
                             if (esta == false) {
                                 producto = ipd.cargarProducto(producto);
-                                listaCesta = UtilidadesListaCesta.cargarListaCestaConProducto(producto);
-                                //productoCarrito.setOrden((short) ((short) listaProductosCarrito.size() + 1));
-                                listaProductosCesta.add(listaCesta);
+                                lineaCesta = UtilidadesLineaCesta.cargarListaCestaConProducto(producto);
+                                lineaCesta.setOrden((short) ((short) listaProductosCesta.size() + 1));
+                                listaProductosCesta.add(lineaCesta);
+                                tipoAccion = "insertar";
                             }
                         } else {
                             producto = ipd.cargarProducto(producto);
-                            listaCesta = UtilidadesListaCesta.cargarListaCestaConProducto(producto);
-                            //producto.setOrden((short) 1);
-                            listaProductosCesta.add(listaCesta);
+                            lineaCesta = UtilidadesLineaCesta.cargarListaCestaConProducto(producto);
+                            lineaCesta.setOrden((short) 1);
+                            lineaCesta.setCantidad((short) 1);
+                            listaProductosCesta.add(lineaCesta);
+                            tipoAccion = "crearPedido";
                         }
 
                     }
                     break;
                 case "add":
-                    if (request.getParameter("id") != null) {
-                        String idProducto = request.getParameter("id");
-                        if (!listaProductosCesta.isEmpty()) {
-                            for (ListaCesta lC : listaProductosCesta) {
-                                if (lC.getIdProducto() == Short.parseShort(idProducto)) {
-                                    lC.setCantidad((short) (lC.getCantidad() + 1));
-                                    listaCesta = new ListaCesta();
-                                    listaCesta = lC;
-                                }
+                    if (!listaProductosCesta.isEmpty()) {
+                        for (LineaCesta lC : listaProductosCesta) {
+                            if (lC.getIdProducto() == producto.getIdProducto()) {
+                                lC.setCantidad((short) (lC.getCantidad() + 1));
+                                lC.setOrden((short) 1);
+                                lineaCesta = lC;
+                                tipoAccion = "actualizar";
                             }
                         }
                     }
+
                     break;
                 case "remove":
-                    if (request.getParameter("id") != null) {
-                        String idProducto = request.getParameter("id");
-                        if (!listaProductosCesta.isEmpty()) {
-                            for (ListaCesta lC : listaProductosCesta) {
-                                if (lC.getIdProducto() == Short.parseShort(idProducto)) {
-                                    lC.setCantidad((short) (lC.getCantidad() - 1));
-                                    listaCesta = new ListaCesta();
-                                    listaCesta = lC;
-                                }
+                    if (!listaProductosCesta.isEmpty()) {
+                        for (LineaCesta lC : listaProductosCesta) {
+                            if (lC.getIdProducto() == producto.getIdProducto()) {
+                                lC.setCantidad((short) (lC.getCantidad() - 1));
+                                lineaCesta = lC;
+                                tipoAccion = "actualizar";
                             }
                         }
                     }
+
                     break;
 
                 case "clear":
-                    listaCesta = new ListaCesta();
-                    if (request.getParameter("id") != null) {
-                        String idProducto = request.getParameter("id");
-
-                        if (!listaProductosCesta.isEmpty()) {
-                            Iterator<ListaCesta> it = listaProductosCesta.listIterator();
-                            while (it.hasNext()) {
-                                if (it.next().getIdProducto() == Short.parseShort(idProducto)) {
-                                    it.remove();
-                                }
+                    lineaCesta = new LineaCesta();
+                    if (!listaProductosCesta.isEmpty()) {
+                        Iterator<LineaCesta> it = listaProductosCesta.listIterator();
+                        while (it.hasNext()) {
+                            LineaCesta lc = it.next();
+                            if (lc.getIdProducto() == producto.getIdProducto()) {
+                                it.remove();
+                                remove = true;
+                            }
+                            if (remove == true) {
+                                lc.setOrden((short) (lc.getOrden() - 1));
                             }
                         }
+                        tipoAccion = listaProductosCesta.isEmpty()? "eliminarPedido" : "eliminarLinea";
                     }
                     break;
                 case "delete":
                     if (!listaProductosCesta.isEmpty()) {
                         listaProductosCesta.clear();
+                        tipoAccion = "eliminarPedido";
                     }
                     break;
             }
         }
-
         if (!listaProductosCesta.isEmpty()) {
-            //Preguntar por atributo de usuario
-            cantidadProductosCesta = UtilidadesListaCesta.cantidadTotalProductosCesta(listaProductosCesta);
-            total = UtilidadesListaCesta.calcularTotal(listaProductosCesta);
+            Collections.sort(listaProductosCesta);
+            cantidadProductosCesta = UtilidadesLineaCesta.cantidadTotalProductosCesta(listaProductosCesta);
+            total = UtilidadesLineaCesta.calcularTotal(listaProductosCesta);
             request.getSession().setAttribute("listaProductosCesta", listaProductosCesta);
             request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
             request.getSession().setAttribute("totalCesta", total);
-            //cambiarCookie a listaCesta
-            cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-            if (cookieAnonimo == null) {
-                cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
-                cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-            } else {
-                cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
-                cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-            }
-
             objeto = new JSONObject();
             objeto.put("tipo", "success");
-            objeto.put("idProducto", listaCesta.getIdProducto());
-            objeto.put("imagen", listaCesta.getNombreImagen());
-            objeto.put("nombre", listaCesta.getNombre());
-            objeto.put("cantidad", listaCesta.getCantidad());
-            objeto.put("precio", listaCesta.getPrecioUnitario());
+            objeto.put("idProducto", lineaCesta.getIdProducto());
+            objeto.put("imagen", lineaCesta.getNombreImagen());
+            objeto.put("nombre", lineaCesta.getNombre());
+            objeto.put("cantidad", lineaCesta.getCantidad());
+            objeto.put("precio", lineaCesta.getPrecioUnitario());
             objeto.put("cantidadTotal", cantidadProductosCesta);
             objeto.put("total", total);
-
         } else {
-
             request.getSession().removeAttribute("listaProductosCesta");
             request.getSession().removeAttribute("cantidadProductosCesta");
             request.getSession().removeAttribute("totalCesta");
-
-            cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
-            if (cookieAnonimo != null) {
-                cookieAnonimo.setValue("");
-                cookieAnonimo.setMaxAge(0);
-            }
             objeto = new JSONObject();
             objeto.put("tipo", "vacio");
-
         }
-        response.addCookie(cookieAnonimo);
+
+        if (request.getSession().getAttribute("usuario") != null) {
+            usuario = (Usuario) request.getSession().getAttribute("usuario");
+            if (tipoAccion.length() > 0) {
+                pedido.setIdUsuario((short) usuario.getIdUsuario());
+                pedido.setImporte(total);
+                pedido.setIva(total * 0.21);
+                if (tipoAccion.equalsIgnoreCase("crearPedido")) {
+                    boolean creado = iped.crearPedido(pedido);
+                    if (creado) {
+                        lineaPedido.setIdProducto(lineaCesta.getIdProducto());
+                        Pedido p = new Pedido();
+                        p = iped.obtenerPedidoNoFinalizado(pedido);
+                        lineaPedido.setIdPedido(p.getIdPedido());
+                        lineaPedido.setCantidad((short) 1);
+                        lineaPedido.setOrden((short) 1);
+                        ilpd.insertarLineaPedido(lineaPedido);
+                        lineaCesta.setIdPedido(p.getIdPedido());
+                        lineaPedido = ilpd.getIdLineaPedido(lineaCesta);
+                        lineaCesta.setIdLinea(lineaPedido.getIdLinea());
+                        listaProductosCesta = UtilidadesLineaCesta.cargarIdsListaProductosCestaUsuario(listaProductosCesta, lineaCesta);
+                    }
+                } else {
+                    Pedido p = new Pedido();
+                    p  = iped.obtenerPedidoNoFinalizado(pedido);
+                    pedido.setIdPedido(p.getIdPedido());
+                    lineaPedido.setIdPedido(pedido.getIdPedido());
+                    lineaPedido.setIdProducto(lineaCesta.getIdProducto());
+                    LineaPedido nuevaL = new LineaPedido();
+                    switch (tipoAccion) {
+                        case "insertar":
+                            lineaPedido.setCantidad((short) 1);
+                            lineaPedido.setOrden((short) 1);
+                            ilpd.insertarLineaPedido(lineaPedido);
+                            break;
+                        case "actualizar":
+                            nuevaL = ilpd.getIdLineaPedido(lineaCesta);
+                            lineaPedido.setIdLinea(nuevaL.getIdLinea());
+                            lineaPedido.setCantidad(lineaCesta.getCantidad());
+                            ilpd.actualizarCantidadLineaPedido(lineaPedido);
+                            break;
+                        case "eliminarLinea":
+                            nuevaL = ilpd.getIdLineaPedido(lineaCesta);
+                            lineaPedido.setIdLinea(nuevaL.getIdLinea());
+                            lineaPedido = ilpd.getIdLineaPedido(lineaCesta);
+                            ilpd.eliminarUnaLineaPedido(lineaPedido);
+                            break;
+                        case "eliminarPedido":
+                            ilpd.eliminarTodasLasLineas(pedido);
+                            iped.eliminarPedido(pedido);
+                            break;
+                    }
+                    if (!tipoAccion.equalsIgnoreCase("eliminarPedido")) {
+                        lineaCesta.setIdLinea(lineaPedido.getIdLinea());
+                        iped.actualizarPedido(pedido);
+                        listaProductosCesta = UtilidadesLineaCesta.cargarIdsListaProductosCestaUsuario(listaProductosCesta, lineaCesta);
+                    }
+                }
+            }
+        } else {
+            if (cookieAnonimo == null) {
+                cookieAnonimo = new Cookie("cookieAnonimo", "");
+            }
+            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
+            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
+            response.addCookie(cookieAnonimo);
+        }
+
         response.setContentType("application/json");
         response.getWriter().print(objeto);
     }

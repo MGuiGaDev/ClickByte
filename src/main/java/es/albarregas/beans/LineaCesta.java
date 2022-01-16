@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @author Manuel Guillén Gallardo
  */
-public class ListaCesta implements Serializable{
+public class LineaCesta implements Serializable, Comparable<LineaCesta>{
     private short idProducto;
     private String nombre;
     private String marca;
@@ -20,6 +20,15 @@ public class ListaCesta implements Serializable{
     private short cantidad;
     private short idLinea;
     private short idPedido;
+    private short orden;
+
+    public short getOrden() {
+        return orden;
+    }
+
+    public void setOrden(short orden) {
+        this.orden = orden;
+    }
 
     public short getIdProducto() {
         return idProducto;
@@ -83,6 +92,17 @@ public class ListaCesta implements Serializable{
 
     public void setIdPedido(short idPedido) {
         this.idPedido = idPedido;
+    }
+
+    @Override
+    public int compareTo(LineaCesta o) {
+        if(o.getOrden()>orden) {
+          return -1;  
+        } else if(o.getOrden()<orden){
+            return 1;
+        } else {
+            return 0;
+        }
     }
     
     

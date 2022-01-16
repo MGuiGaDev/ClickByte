@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author Manuel Guillén Gallardo
  */
 public class UsuarioDAO implements IUsuarioDAO {
-
+    
     @Override
     public Usuario comprobarPassword(Usuario usuario) {
         Usuario nuevoUsuario = null;
@@ -27,8 +27,8 @@ public class UsuarioDAO implements IUsuarioDAO {
         PreparedStatement usuarioPs = null;
         ResultSet res = null;
         String password = usuario.getPassword();
-        String consulta = "SELECT email FROM usuarios WHERE email=? AND password=MD5('"+ password +"');";
-
+        String consulta = "SELECT email FROM usuarios WHERE email=? AND password=MD5('" + password + "');";
+        
         try {
             conexion = ConnectionFactory.openConnectionMysql();
             usuarioPs = conexion.prepareStatement(consulta);
@@ -39,9 +39,9 @@ public class UsuarioDAO implements IUsuarioDAO {
                 nuevoUsuario.setEmail(res.getString(1));
             }
         } catch (SQLException ex) {
-
+            
             System.out.println("Fallo en la conexión.");
-
+            
         } finally {
             closeConnection();
         }
@@ -50,13 +50,13 @@ public class UsuarioDAO implements IUsuarioDAO {
     
     @Override
     public Usuario comprobarEmail(Usuario usuario) {
-
+        
         Usuario nuevoUsuario = null;
         Connection conexion = null;
         PreparedStatement usuarioPs = null;
         ResultSet res = null;
         String consulta = "SELECT email FROM usuarios WHERE email=?";
-
+        
         try {
             conexion = ConnectionFactory.openConnectionMysql();
             usuarioPs = conexion.prepareStatement(consulta);
@@ -67,15 +67,15 @@ public class UsuarioDAO implements IUsuarioDAO {
                 nuevoUsuario.setEmail(res.getString(1));
             }
         } catch (SQLException ex) {
-
+            
             System.out.println("Fallo en la conexión.");
-
+            
         } finally {
             closeConnection();
         }
         return nuevoUsuario;
     }
-
+    
     @Override
     public boolean crearUsuario(String sql) {
         boolean creado = false;
@@ -95,13 +95,13 @@ public class UsuarioDAO implements IUsuarioDAO {
             } catch (SQLException ex1) {
                 Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex1);
             }
-
+            
         } finally {
             closeConnection();
         }
         return creado;
     }
-
+    
     @Override
     public short obtenerIdUsuario() {
         short idUsuario = 0;
@@ -109,7 +109,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         Statement sT = null;
         ResultSet res = null;
         String consulta = "SELECT MAX(idUsuario) FROM usuarios;";
-
+        
         try {
             conexion = ConnectionFactory.openConnectionMysql();
             sT = conexion.createStatement();
@@ -118,15 +118,15 @@ public class UsuarioDAO implements IUsuarioDAO {
                 idUsuario = res.getShort(1);
             }
         } catch (SQLException ex) {
-
+            
             System.out.println("Fallo en la conexión.");
-
+            
         } finally {
             closeConnection();
         }
         return idUsuario;
     }
-
+    
     @Override
     public boolean actualizarAvatar(Usuario usuario) {
         boolean actualizado = false;
@@ -148,19 +148,19 @@ public class UsuarioDAO implements IUsuarioDAO {
             } catch (SQLException ex1) {
                 Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex1);
             }
-
+            
         } finally {
             closeConnection();
         }
         return actualizado;
     }
-
+    
     @Override
     public Usuario obtenerUsuario(Usuario usuario) {
         Connection conexion = null;
         PreparedStatement busquedaUsuario = null;
         ResultSet res = null;
-        String consulta = "SELECT Password, Nombre, Apellidos, NIF, Telefono, Direccion, CodigoPostal, Localidad, Provincia, UltimoAcceso, avatar from usuarios WHERE email = ?;";
+        String consulta = "SELECT IdUsuario, Password, Nombre, Apellidos, NIF, Telefono, Direccion, CodigoPostal, Localidad, Provincia, UltimoAcceso, avatar from usuarios WHERE email = ?;";
         
         if (usuario.getEmail() != null) {
             try {
@@ -169,18 +169,19 @@ public class UsuarioDAO implements IUsuarioDAO {
                 busquedaUsuario.setString(1, usuario.getEmail());
                 res = busquedaUsuario.executeQuery();
                 while (res.next()) {
-                usuario.setPassword(res.getString(1));
-                usuario.setNombre(res.getString(2));
-                usuario.setApellidos(res.getString(3));
-                usuario.setNif(res.getString(4));
-                usuario.setTelefono(res.getString(5));
-                usuario.setDireccion(res.getString(6));
-                usuario.setCodigoPostal(res.getString(7));
-                usuario.setLocalidad(res.getString(8));
-                usuario.setProvincia(res.getString(9));
-                usuario.setUltimoAcceso(res.getDate(10));
-                usuario.setAvatar(res.getString(11));
-            }
+                    usuario.setIdUsuario(res.getShort(1));
+                    usuario.setPassword(res.getString(2));
+                    usuario.setNombre(res.getString(3));
+                    usuario.setApellidos(res.getString(4));
+                    usuario.setNif(res.getString(5));
+                    usuario.setTelefono(res.getString(6));
+                    usuario.setDireccion(res.getString(7));
+                    usuario.setCodigoPostal(res.getString(8));
+                    usuario.setLocalidad(res.getString(9));
+                    usuario.setProvincia(res.getString(10));
+                    usuario.setUltimoAcceso(res.getDate(11));
+                    usuario.setAvatar(res.getString(12));
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -190,11 +191,9 @@ public class UsuarioDAO implements IUsuarioDAO {
         return usuario;
     }
     
-
     @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }
-
     
 }

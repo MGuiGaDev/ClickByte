@@ -18,9 +18,27 @@ public class Pedido implements Serializable{
     private short idPedido;
     private Date fecha;
     private enum estado {C, F};
+    private short idUsuario;
     private double importe;
     private double iva;
     private ArrayList<LineaPedido> lineaPedido;
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    public short getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(short idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 
     public short getIdPedido() {
         return idPedido;

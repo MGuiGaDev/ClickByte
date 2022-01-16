@@ -7,9 +7,9 @@ package es.albarregas.controllers;
 
 import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAOFactory.DAOFactory;
-import es.albarregas.beans.ListaCesta;
+import es.albarregas.beans.LineaCesta;
 import es.albarregas.models.UtilidadesCookie;
-import es.albarregas.models.UtilidadesListaCesta;
+import es.albarregas.models.UtilidadesLineaCesta;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -29,20 +29,20 @@ public class FrontController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "index.jsp";
-        ArrayList<ListaCesta> listaProductosCesta = new ArrayList<>();
+        ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
 
-        if (request.getParameter("volver")==null) {
-            if (cookieAnonimo!=null) {
+        if (request.getParameter("volver") == null) {
+            if (cookieAnonimo != null) {
                 listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
                 if (!listaProductosCesta.isEmpty()) {
                     DAOFactory daof = DAOFactory.getDAOFactory(1);
                     IProductoDAO ipd = daof.getProductoDAO();
                     listaProductosCesta = ipd.cargarProductosCarrito(listaProductosCesta);
-                    int cantidadProductosCesta = UtilidadesListaCesta.cantidadTotalProductosCesta(listaProductosCesta);
-                    double total = UtilidadesListaCesta.calcularTotal(listaProductosCesta);
-                    request.getSession().setAttribute("listaProductosCarrito", listaProductosCesta);
+                    int cantidadProductosCesta = UtilidadesLineaCesta.cantidadTotalProductosCesta(listaProductosCesta);
+                    double total = UtilidadesLineaCesta.calcularTotal(listaProductosCesta);
+                    request.getSession().setAttribute("listaProductosCesta", listaProductosCesta);
                     request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
                     request.getSession().setAttribute("totalCarrito", total);
                 }
@@ -50,9 +50,7 @@ public class FrontController extends HttpServlet {
                 response.addCookie(cookieAnonimo);
             }
         }
-        if(request.getSession().getAttribute("usuario")!=null) {
-            
-        }
+
         request.getRequestDispatcher(url).forward(request, response);
 
     }

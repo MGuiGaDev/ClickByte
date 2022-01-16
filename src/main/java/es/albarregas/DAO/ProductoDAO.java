@@ -5,7 +5,7 @@
  */
 package es.albarregas.DAO;
 
-import es.albarregas.beans.ListaCesta;
+import es.albarregas.beans.LineaCesta;
 import es.albarregas.beans.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,9 +82,8 @@ public class ProductoDAO implements IProductoDAO {
                 nuevoProducto.setPrecio(productoRS.getDouble(5));
                 nuevoProducto.setMarca(productoRS.getString(6));
                 nuevoProducto.setDireccionImagen(productoRS.getString(7));
-                nuevoProducto.setCantidad((short) 1);
             }
-            producto.setCantidad((short) 1);
+            nuevoProducto.setCantidad((short) 1);
         } catch (SQLException ex) {
 
             System.out.println("Fallo en la conexión.");
@@ -179,18 +177,13 @@ public class ProductoDAO implements IProductoDAO {
         }
         return listaProductosPorCategoria;
     }
-    
-    @Override
-    public void closeConnection() {
-        ConnectionFactory.closeConnection();
-    }
 
     @Override
-    public ArrayList<ListaCesta> cargarProductosCarrito(ArrayList<ListaCesta> listaProductosCesta) {
-        ListaCesta listaCesta = null;
+    public ArrayList<LineaCesta> cargarProductosCarrito(ArrayList<LineaCesta> listaProductosCesta) {
+        LineaCesta listaCesta = null;
         StringBuilder listaIdProductos = new StringBuilder();
         int count = 0;
-        for (ListaCesta lC : listaProductosCesta) {
+        for (LineaCesta lC : listaProductosCesta) {
             count++;
             listaIdProductos.append(lC.getIdProducto());
             if (count < listaProductosCesta.size()) {
@@ -205,13 +198,13 @@ public class ProductoDAO implements IProductoDAO {
             productosST = conexion.createStatement();
             productoRS = productosST.executeQuery(consulta);
             while (productoRS.next()) {
-                listaCesta = new ListaCesta();
+                listaCesta = new LineaCesta();
                 listaCesta.setIdProducto(productoRS.getShort(1));
                 listaCesta.setNombre(productoRS.getString(2));
                 listaCesta.setPrecioUnitario(productoRS.getDouble(3));
                 listaCesta.setMarca(productoRS.getString(4));
                 listaCesta.setNombreImagen(productoRS.getString(5));
-                for(ListaCesta lC : listaProductosCesta) {
+                for(LineaCesta lC : listaProductosCesta) {
                     if(listaCesta.getIdProducto() == lC.getIdProducto()){
                         listaCesta.setCantidad(lC.getCantidad());
                     }
@@ -234,4 +227,9 @@ public class ProductoDAO implements IProductoDAO {
         return listaProductosCesta;
     }
 
+    
+    @Override
+    public void closeConnection() {
+        ConnectionFactory.closeConnection();
+    }
 }

@@ -5,19 +5,20 @@
  */
 package es.albarregas.models;
 
-import es.albarregas.beans.ListaCesta;
+import es.albarregas.beans.LineaCesta;
 import es.albarregas.beans.Producto;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Manuel Guillén Gallardo
  */
-public class UtilidadesListaCesta {
-    public static ListaCesta cargarListaCestaConProducto(Producto producto){
-        ListaCesta lC = null;
+public class UtilidadesLineaCesta{
+    public static LineaCesta cargarListaCestaConProducto(Producto producto){
+        LineaCesta lC = null;
         if(producto!=null) {
-            lC = new ListaCesta();
+            lC = new LineaCesta();
             lC.setIdProducto(producto.getIdProducto());
             lC.setNombre(producto.getNombre());
             lC.setMarca(producto.getMarca());
@@ -27,23 +28,34 @@ public class UtilidadesListaCesta {
         }
         return lC;
     }
-    public static int cantidadTotalProductosCesta(List<ListaCesta> listaProductosCesta) {
+    public static int cantidadTotalProductosCesta(List<LineaCesta> listaProductosCesta) {
         int cantidadTotal = 0;
         if (!listaProductosCesta.isEmpty()) {
-            for (ListaCesta lC : listaProductosCesta) {
+            for (LineaCesta lC : listaProductosCesta) {
                 cantidadTotal += lC.getCantidad();
             }
         }
         return cantidadTotal;
     }
     
-    public static double calcularTotal(List<ListaCesta> listaProductosCesta) {
+    public static double calcularTotal(List<LineaCesta> listaProductosCesta) {
         double total = 0;
         if (!listaProductosCesta.isEmpty()) {
-            for (ListaCesta lC : listaProductosCesta) {
+            for (LineaCesta lC : listaProductosCesta) {
                 total += lC.getCantidad() * lC.getPrecioUnitario();
             }
         }
         return total;
+    }
+    public static ArrayList<LineaCesta> cargarIdsListaProductosCestaUsuario(ArrayList<LineaCesta> listaCestaProductos,LineaCesta listaCesta) {
+        if(!listaCestaProductos.isEmpty()){
+            for(LineaCesta lc : listaCestaProductos) {
+                if(lc.getIdProducto()== listaCesta.getIdProducto()){
+                    lc.setIdLinea(listaCesta.getIdLinea());
+                    lc.setIdPedido(listaCesta.getIdPedido());
+                }
+            }
+        }
+        return listaCestaProductos;
     }
 }

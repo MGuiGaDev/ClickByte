@@ -5,11 +5,18 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.ILineaPedidoDAO;
+import es.albarregas.DAO.IPedidoDAO;
 import es.albarregas.DAO.IUsuarioDAO;
 import es.albarregas.DAOFactory.DAOFactory;
+import es.albarregas.beans.LineaCesta;
+import es.albarregas.beans.Pedido;
 import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
+import es.albarregas.models.UtilidadesLineaCesta;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -50,9 +57,17 @@ public class IniciarSesionController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "index.jsp";
+
         DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IPedidoDAO iped = daof.getPedidoDAO();
+        ILineaPedidoDAO ild = daof.getLineaPedidoDAO();
         IUsuarioDAO udao = daof.getUsuarioDAO();
         Usuario usuario = null;
+        Pedido pedido = new Pedido();
+        ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
+        Cookie[] co = request.getCookies();
+        Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
+
         if (request.getParameter("accion") != null) {
             String accion = request.getParameter("accion");
             switch (accion) {
@@ -60,18 +75,31 @@ public class IniciarSesionController extends HttpServlet {
                     request.removeAttribute("mensajeCrearCuenta");
                     break;
                 case "iniciarSesion":
-                    //aquí, si el usuario tiene una cookie de anónimo nos da igual => reventarla
-                    //debo comprobar última compra realizada y en caso de que exista la paso a sesión
-
                     if (request.getParameter("email") != null) {
                         usuario = new Usuario();
                         usuario.setEmail(request.getParameter("email"));
                         usuario = udao.obtenerUsuario(usuario);
-                        if (usuario != null) {
-                            request.getSession().setAttribute("usuario", usuario);
-                        }
                     }
                     break;
+            }
+
+            if (usuario != null) {
+                request.getSession().setAttribute("usuario", usuario);
+                pedido.setIdUsuario(usuario.getIdUsuario());
+                pedido = iped.obtenerPedidoNoFinalizado(pedido);
+                if (pedido != null) {
+                    listaProductosCesta = ild.obtenerTodasLasLineas(pedido);
+                    Collections.sort(listaProductosCesta);
+                    int cantidadProductosCesta = UtilidadesLineaCesta.cantidadTotalProductosCesta(listaProductosCesta);
+                    request.getSession().setAttribute("listaProductosCesta", listaProductosCesta);
+                    request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
+                    request.getSession().setAttribute("totalCesta", pedido.getImporte());
+                }
+
+                if (cookieAnonimo != null) {
+                    cookieAnonimo.setMaxAge(0);
+                    response.addCookie(cookieAnonimo);
+                }
             }
         }
         request.getRequestDispatcher(url).forward(request, response);
