@@ -122,6 +122,7 @@
             </c:when>
         </c:choose>
     </main>
+    <%@include file="../INCLUDES/footer.inc"%>
     <script><%@include file="../JAVASCRIPT/header.js"%></script>
     <script><%@include file="../JAVASCRIPT/iniciarSesion.js"%></script>
     <script><%@include file="../JAVASCRIPT/gestionarCarrito.js"%></script>

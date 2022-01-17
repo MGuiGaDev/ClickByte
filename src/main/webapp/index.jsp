@@ -24,7 +24,7 @@
     </head>
     <body id="body">
         <%@include file="INCLUDES/header.inc"%>
-        <main>
+        <main class="main__index">
             <%@include file="INCLUDES/menuCategorias.inc"%>
             <section class="container__video__card">
                 <div class="video__card">
@@ -38,6 +38,7 @@
             <div class="container__productos"></div>
             <div class="container__resultado__busqueda"></div>
         </main>
+            <%@include file="INCLUDES/footer.inc"%>
         <script><%@include file="/JAVASCRIPT/header.js"%></script>
         <script><%@include file="/JAVASCRIPT/iniciarSesion.js"%></script>
         <script><%@include file="/JAVASCRIPT/gestionarCarrito.js"%></script>

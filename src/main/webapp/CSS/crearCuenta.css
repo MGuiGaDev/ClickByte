@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Text+Me+One&display=swap');
 *,
 *::before,
 *::after {
@@ -7,14 +8,17 @@
 }
 
 body {
-  font-family: Montserrat, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Text Me One', sans-serif;
   margin: 0;
   display: grid;
   place-items: center;
   min-height: 100vh;
+  background: #070212;
 }
 
-
+h1 {
+    color: #F68E5F;
+}
 /* Form */
 .form {
   width: 400px;
@@ -26,10 +30,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: white;
+  height: fit-content;
 }
+
 .data {
     display: none;
-    height: 350px;
 }
 .data__body {
     height: 100%;
@@ -46,14 +52,27 @@ label {
     font-weight: bolder;
 }
 input {
-    outline: none;
-    border: none;
-    border-bottom: 1px solid #ccc;
+    margin-top: .2rem;
+    padding: .3rem;
+    font-size: 14px;
+    outline-color: #F68E5F;
 }
-input:focus{
-    border-bottom: 1px solid black;
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid #F68E5F;
+  -webkit-text-fill-color: black;
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  transition: background-color 5000s ease-in-out 0s;
 }
 .input__msg {
+    margin-top: .2rem;
     font-size: 12px;
 }
 .show {
@@ -87,4 +106,25 @@ input:focus{
     border-radius: 50%;
     border: 1px solid lightgrey;
     box-shadow: 0 0px 20px rgba(0,0,0,0.2);
+}
+.form__body {
+    height: fit-content;
+}
+.form__footer {
+    display: flex;
+    flex-direction: row;
+    gap:.5rem;
+    padding: .5rem;
+}
+.form__footer button {
+    cursor: pointer;
+    padding: .5rem;
+    background: #070212;
+    color: #F68E5F;
+    transition: .4s;
+    border: none;
+}
+.form__footer button:hover{
+    background: #F68E5F;
+    color: white;
 }

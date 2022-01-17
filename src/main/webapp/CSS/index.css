@@ -367,7 +367,7 @@ main {
     background: var(--c-secondary);
     color: var(--c-primary);
     transition: .4s ease-in-out;
-    
+
 }
 .producto__btn:hover {
     background: var(--c-primary);
@@ -395,4 +395,81 @@ main {
     width: 100%;
     padding: 1rem;
     text-align: center;
+}
+footer {
+    background: #070212;
+    display: flex;
+    flex-direction: column;
+
+}
+.container__footer {
+    border-top: 2px solid #F68E5F;
+    border-bottom: 2px solid #dadada;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 1rem;
+    background: #fafafa;
+}
+.container__list__footer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.container__list__footer li {
+    margin-bottom: .5rem;
+}
+.container__list__footer li:hover {
+    color: #F68E5F;
+}
+.fab__footer{
+    color: #070212;
+}
+.fab__footer:hover {
+    color: #F68E5F;
+}
+.container__list__footer h3 {
+    font-size: 26px;
+}
+.autor {
+    padding: 1rem;
+    background: #fafafa;
+}
+.btn__login {
+    cursor: pointer;
+    font-weight: 500;
+    transition: all .2s;
+    padding: 10px 20px;
+    background: #070212;
+    align-items: center;
+    font-size: 20px;
+    color: #F68E5F;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    border: none;
+}
+.btn__login-activo {
+    display: block;
+}
+.btn__login:hover {
+    box-shadow: none;
+    background:  #F68E5F;
+    color: white;
+}
+
+.btn__login > .material-icons {
+    width: 34px;
+    margin-left: 10px;
+    transition: transform .3s ease-in-out;
+}
+
+.btn__login:hover .material-icons {
+    transform: translateX(5px);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+button:disabled {
+    background: #dadada;
 }

@@ -292,7 +292,7 @@ Busqueda
 }
 .login{
     position: absolute;
-    width: 40%;
+    width: 450px;
     height: fit-content;
     box-shadow: 0 0 10px rgba(0,0,0,.5);
     border-radius: 10px;
@@ -303,9 +303,8 @@ Busqueda
     padding: 1rem;
     justify-content: space-between;
     color: white;
-    font-size: 20px;
-    font-weight: 600;
-    background: var(--c-primary);
+    font-size: 26px;
+    background: var(--c-secondary);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -318,15 +317,21 @@ Busqueda
     padding: 2rem 1rem 2rem;
     gap: 1rem;
     background-color: white;
+    justify-content: center;
 }
 .form__group {
     border-radius: 5px;
     padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap:.5rem;
 }
 .input__login {
     outline: none;
     border: none;
     border-bottom: 1px solid #ccc;
+    padding: .2rem;
+    font-size: 16px;
 }
 .input__login:focus{
     border-bottom: 1px solid black;

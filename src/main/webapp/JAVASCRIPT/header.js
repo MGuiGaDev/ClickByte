@@ -108,7 +108,7 @@ function visualizarCarrito() {
 function visualizarLogin() {
     if (!open__modal__login.querySelector("img")) {
         modal__login.classList.add("modal__login-activo");
-        open__modal__login.style = "background: linear-gradient(to right top, #7B65FF 0%, #251374 100%);  color: white";
+        open__modal__login.style = "background:#F68E5F;  color: white";
     }
 }
 
@@ -135,7 +135,7 @@ function cerrarModalesGlobal(evento) {
             }
             break;
         case ((evento === close__login || !login.contains(evento)) && !open__modal__login.contains(evento) && modal__login.classList.contains("modal__login-activo")):
-            open__modal__login.style = "background: #1882DA;";
+            open__modal__login.style = "background: #070212;";
             open__modal__login.style = ":hover {background: linear-gradient(to right top, #1882DA 0%, #251374 100%);}";
             modal__login.classList.remove("modal__login-activo");
             break;

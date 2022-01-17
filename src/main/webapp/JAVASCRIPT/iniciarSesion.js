@@ -3,37 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-let login__body;
 let email;
 let password;
 let show;
 document.addEventListener("DOMContentLoaded", asignarEventos);
 
 function asignarEventos() {
-    login__body = document.getElementById("login__body");
     email = document.getElementById("email");
     password = document.getElementById("password");
     show = document.getElementById("show");
 
-    email.addEventListener(("blur"), comprobarEmail);
-    password.addEventListener(("blur"), comprobarPassword);
+    email.addEventListener(("input"), comprobarEmail);
+    password.addEventListener(("input"), comprobarPassword);
 
-
-    login__body.addEventListener("focusout", function (evento) {
-        validarCampos(evento);
-    });
     show.addEventListener("click", mostrarPassword);
 }
 
-function validarCampos(evento) {
-    if (evento.target.id === "password") {
-        if (email.value !== "" && password.value !== "") {
-            document.getElementById("btn__login").removeAttribute("disabled");
-        }
-    } else {
-
-    }
-}
 function comprobarEmail() {
     let value = email.value;
     let url = "AjaxValidarCuentaController";
@@ -47,10 +32,10 @@ function comprobarEmail() {
         success: function (data) {
 
             if (data.tipo === 'error') {
-                email.style = "border-bottom: 1px solid red;";
+                email.style = "border-bottom: 1px solid #ff4343;";
                 email.focus();
             } else {
-                email.style = "border-bottom: 1px solid black;";
+                email.style = "border-bottom: 1px solid #9cff5d;";
             }
 
         },
@@ -77,10 +62,11 @@ function comprobarPassword() {
             success: function (data) {
 
                 if (data.tipo === 'error') {
-                    password.style = "border-bottom: 1px solid red;";
+                    password.style = "border-bottom: 1px solid #ff4343;";
                     password.focus();
                 } else {
-                    password.style = "border-bottom: 1px solid black;";
+                    password.style = "border-bottom: 1px solid #9cff5d;";
+                    document.getElementById("btn__login").removeAttribute("disabled");
                 }
 
             },
