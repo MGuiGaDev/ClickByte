@@ -5,12 +5,15 @@
  */
 package es.albarregas.controllers;
 
+import es.albarregas.DAO.ILineaPedidoDAO;
+import es.albarregas.DAO.IPedidoDAO;
 import es.albarregas.DAO.IUsuarioDAO;
 import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.LineaCesta;
-import es.albarregas.beans.Producto;
+import es.albarregas.beans.Pedido;
 import es.albarregas.beans.Usuario;
 import es.albarregas.models.UtilidadesCookie;
+import es.albarregas.models.UtilidadesLineaCesta;
 import es.albarregas.models.UtilidadesUsuario;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -63,12 +66,14 @@ public class CrearCuentaController extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "FrontController";
-        //Producto productoCesta = null;
         ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = null;
+        Pedido nuevoPedido = null;
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IUsuarioDAO udao = daof.getUsuarioDAO();
+        IPedidoDAO iped = daof.getPedidoDAO();
+        ILineaPedidoDAO ilpd = daof.getLineaPedidoDAO();
         Usuario usuario = new Usuario();
         String dirImagen = request.getServletContext().getRealPath("/IMAGENES/AVATARES/");
         String accion = request.getParameter("accion");
@@ -90,17 +95,26 @@ public class CrearCuentaController extends HttpServlet {
                         if (usuario.getAvatar().length() > 1) {
                             boolean actualizado = udao.actualizarAvatar(usuario);
                             if (actualizado) {
-                                url = "JSP/usuario.jsp";
                                 request.getSession().setAttribute("usuario", usuario);
                                 cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
                                 if (cookieAnonimo != null) {
                                     if (!cookieAnonimo.getValue().equals("")) {
                                         listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
-                                        //cargarConPedido
+                                        nuevoPedido = new Pedido();
+                                        nuevoPedido.setIdUsuario((short) usuario.getIdUsuario());
+                                        double total = (double) request.getSession().getAttribute("totalCesta");
+                                        nuevoPedido.setImporte(total);
+                                        nuevoPedido.setIva(total * 0.21);
+                                        boolean pedidoCreado = iped.crearPedido(nuevoPedido);
+                                        if (pedidoCreado) {
+                                            String consulta = UtilidadesLineaCesta.configurarConsultaInsertarVariasLineas(listaProductosCesta);
+                                            ilpd.insertarVariasLineasPedido(consulta);
+                                        }
+                                        cookieAnonimo.setValue("");
                                         cookieAnonimo.setMaxAge(0);
                                         response.addCookie(cookieAnonimo);
                                     }
-                                } 
+                                }
                             }
                         }
                     }

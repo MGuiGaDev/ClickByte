@@ -33,9 +33,8 @@ public class FrontController extends HttpServlet {
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
 
-        if (request.getParameter("volver") == null && request.getAttribute("volver") == null) {
+        if (request.getParameter("volver") == null) {
             if (cookieAnonimo != null) {
-                listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
                 if (!listaProductosCesta.isEmpty()) {
                     DAOFactory daof = DAOFactory.getDAOFactory(1);
                     IProductoDAO ipd = daof.getProductoDAO();

@@ -12,7 +12,7 @@
                     <h1 class="clickbyte__title">ClickByte.es</h1>
                 </div>
                 <div class="info__aviso">
-                    <h2>Para realizar una compra debe iniciar sesión o crear una cuenta de usuario.</h2>
+                    <h2>Para realizar una compra debe iniciar sesi&oacute;n o crear una cuenta de usuario.</h2>
                 </div>
             </div>
         </form>

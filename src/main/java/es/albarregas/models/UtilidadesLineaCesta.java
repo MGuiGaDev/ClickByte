@@ -58,4 +58,18 @@ public class UtilidadesLineaCesta{
         }
         return listaCestaProductos;
     }
+    public static String configurarConsultaInsertarVariasLineas(ArrayList<LineaCesta> listaProductos){
+        StringBuilder consulta = new StringBuilder();
+        int count = 0;
+        for(LineaCesta lc : listaProductos) {
+            count++;
+            consulta.append("(").append(lc.getIdProducto()).append(",").append(lc.getIdPedido()).append(",").append(lc.getCantidad()).append(",").append(lc.getOrden()).append(")");
+            if (count < listaProductos.size()) {
+                    consulta.append(",");
+            } 
+            
+        }
+        
+        return consulta.toString();
+    }
 }

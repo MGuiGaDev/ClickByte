@@ -19,6 +19,7 @@ public interface ILineaPedidoDAO {
 //actualizarlinea
     //eliminarlinea
     public void insertarLineaPedido(LineaPedido lp);
+    public void insertarVariasLineasPedido(String consulta);
     public LineaPedido getIdLineaPedido(LineaCesta lc);
     public void actualizarCantidadLineaPedido(LineaPedido lp);
     public void eliminarUnaLineaPedido(LineaPedido lp);

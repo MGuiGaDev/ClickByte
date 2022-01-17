@@ -4,7 +4,7 @@
             <h3>Por qu&eacute; comprar</h3>
             <ul>
                 <li>Premium</li>
-                <li>Cómo comprar</li>
+                <li>C&oacute;mo comprar</li>
                 <li>Formas de pago</li>
                 <li>Gastos de envío</li>
                 <li>Cupones descuento</li>

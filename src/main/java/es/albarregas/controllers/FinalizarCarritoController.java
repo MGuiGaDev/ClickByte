@@ -11,11 +11,13 @@ import es.albarregas.DAOFactory.DAOFactory;
 import es.albarregas.beans.LineaCesta;
 import es.albarregas.beans.Pedido;
 import es.albarregas.beans.Usuario;
+import es.albarregas.models.UtilidadesCookie;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,10 +56,8 @@ public class FinalizarCarritoController extends HttpServlet {
             throws ServletException, IOException {
         String url = "JSP/usuario.jsp";
         ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
-        LineaCesta lineaCesta = new LineaCesta();
         Pedido pedido = null;
         Usuario usuario = null;
-        
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IPedidoDAO iped = daof.getPedidoDAO();
 
@@ -65,7 +65,7 @@ public class FinalizarCarritoController extends HttpServlet {
             url = "FrontController";
             request.setAttribute("mensajeCrearCuenta", "crear");
         } else {
-            if (request.getSession().getAttribute("listaProductosCesta") != null) {
+            if (request.getSession().getAttribute("listaProductosCesta")!=null) {
                 usuario = (Usuario) request.getSession().getAttribute("usuario");
                 listaProductosCesta = (ArrayList<LineaCesta>) request.getSession().getAttribute("listaProductosCesta");
                 pedido = new Pedido();
@@ -78,7 +78,7 @@ public class FinalizarCarritoController extends HttpServlet {
                 request.getSession().removeAttribute("listaProductosCesta");
                 request.getSession().removeAttribute("cantidadProductosCesta");
                 request.getSession().removeAttribute("totalCesta");
-            } 
+            }
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

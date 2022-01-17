@@ -176,8 +176,31 @@ public class LineaPedidoDAO implements ILineaPedidoDAO {
     }
 
     @Override
+    public void insertarVariasLineasPedido(String consulta) {
+        Statement crearLp = null;
+        String sql = consulta;
+        try {
+            conexion = ConnectionFactory.openConnectionMysql();
+            conexion.setAutoCommit(false);
+            crearLp = conexion.createStatement();
+            crearLp.executeUpdate(sql);
+            conexion.commit();
+        } catch (SQLException ex) {
+            try {
+                System.out.println("Fallo en la conexión.");
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+
+        } finally {
+            closeConnection();
+        }
+    }
+
+
+    @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }
-
 }
