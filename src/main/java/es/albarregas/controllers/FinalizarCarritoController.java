@@ -72,7 +72,7 @@ public class FinalizarCarritoController extends HttpServlet {
                 pedido.setIdUsuario((short) usuario.getIdUsuario());
                 Pedido pedidoFinalizado = new Pedido();
                 pedidoFinalizado = iped.obtenerPedidoNoFinalizado(pedido);
-                iped.cambiarEstadoPedido(pedido);
+                iped.cambiarEstadoPedido(pedidoFinalizado);
                 request.setAttribute("listaProductosPedidoFinalizado", listaProductosCesta);
                 request.setAttribute("pedidoFinalizado", pedidoFinalizado);
                 request.getSession().removeAttribute("listaProductosCesta");
