@@ -1,0 +1,81 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-ene-2022, 20:06:49
+    Author     : Manuel Guillén Gallardo
+*/
+.presentacion__vista__usuario{
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.title__apartado {
+    color: #F68E5F;
+    font-size: 40px;
+}
+.tilte__vista {
+    margin: 2rem;
+    height: 150px;
+    width: 800px;
+    background: linear-gradient(90deg, rgba(255,131,75,1) 47%, rgba(230,76,7,1) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+.container__datos__usuario {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+}
+.container__datos__usuario > div {
+    padding: 1rem 0;
+} 
+.datos__shipping, .datos__personales,.container__pass {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.form__group{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.datos__cuenta {
+    display: flex;
+    flex-direction: column;  
+}
+label {
+    font-weight: bold;
+    font-size: 20px;
+}
+input{
+    padding: 5px;
+    font-size: 18px;
+}
+.mostrar{
+    font-size: 16px;
+    font-weight: 500;
+}
+.nif {
+    margin-top: 5px;
+    font-size: 18px;
+}
+.btn__actualizar {
+    margin-bottom: 1rem;
+    font-size: 20px;
+    padding: 2rem;
+    background: #070212;
+    color: #F68E5F;
+    transition: .4s;
+}
+.btn__actualizar:hover{
+    background: #F68E5F;
+    color: white;
+}

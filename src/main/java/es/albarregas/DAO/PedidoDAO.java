@@ -6,11 +6,13 @@
 package es.albarregas.DAO;
 
 import es.albarregas.beans.Pedido;
+import es.albarregas.beans.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,8 +50,6 @@ public class PedidoDAO implements IPedidoDAO {
         return creado;
     }
 
-    
-
     @Override
     public Pedido obtenerPedidoNoFinalizado(Pedido pedido) {
         Pedido p = null;
@@ -78,6 +78,7 @@ public class PedidoDAO implements IPedidoDAO {
         }
         return p;
     }
+
     @Override
     public void eliminarPedido(Pedido pedido) {
         PreparedStatement pPS = null;
@@ -127,9 +128,61 @@ public class PedidoDAO implements IPedidoDAO {
     }
 
     @Override
+    public void cambiarEstadoPedido(Pedido pedido) {
+        PreparedStatement pPS = null;
+        try {
+            conexion = ConnectionFactory.openConnectionMysql();
+            conexion.setAutoCommit(false);
+            pPS = conexion.prepareStatement("UPDATE pedidos SET Estado='f' WHERE IdPedido=?;");
+            pPS.setShort(1, pedido.getIdPedido());
+            pPS.executeUpdate();
+            conexion.commit();
+        } catch (SQLException ex) {
+            try {
+                System.out.println("Fallo en la conexión.");
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+
+        } finally {
+            closeConnection();
+        }
+    }
+
+    @Override
+    public ArrayList<Pedido> obtenerTodosLosPedidos(Usuario usuario) {
+        Pedido p = null;
+        ArrayList<Pedido> listaPedidos = new ArrayList<>();
+        PreparedStatement pPS = null;
+        ResultSet pedidoRS = null;
+        try {
+            conexion = ConnectionFactory.openConnectionMysql();
+            pPS = conexion.prepareStatement("SELECT * FROM pedidos WHERE IdUsuario=?;");
+            pPS.setShort(1, usuario.getIdUsuario());
+            pedidoRS = pPS.executeQuery();
+            while (pedidoRS.next()) {
+                p = new Pedido();
+                p.setIdPedido(pedidoRS.getShort(1));
+                p.setFecha(pedidoRS.getDate(2));
+                p.setEstado(pedidoRS.getString(3));
+                p.setIdUsuario(pedidoRS.getShort(4));
+                p.setImporte(pedidoRS.getDouble(5));
+                p.setIva(pedidoRS.getDouble(6));
+                listaPedidos.add(p);
+            }
+        } catch (SQLException ex1) {
+            Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex1);
+
+        } finally {
+            closeConnection();
+        }
+        return listaPedidos;
+    }
+
+    @Override
     public void closeConnection() {
         ConnectionFactory.closeConnection();
     }
-
 
 }

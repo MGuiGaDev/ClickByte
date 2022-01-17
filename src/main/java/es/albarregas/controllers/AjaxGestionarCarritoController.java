@@ -111,7 +111,6 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                             for (LineaCesta lC : listaProductosCesta) {
                                 if (lC.getIdProducto() == producto.getIdProducto()) {
                                     lineaCesta.setCantidad((short) ((short) lC.getCantidad() + 1));
-                                    lineaCesta.setOrden((short) ((short) listaProductosCesta.size() + 1));
                                     lineaCesta = lC;
                                     esta = true;
                                     tipoAccion = "actualizar";
@@ -140,7 +139,6 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                         for (LineaCesta lC : listaProductosCesta) {
                             if (lC.getIdProducto() == producto.getIdProducto()) {
                                 lC.setCantidad((short) (lC.getCantidad() + 1));
-                                lC.setOrden((short) 1);
                                 lineaCesta = lC;
                                 tipoAccion = "actualizar";
                             }
@@ -175,7 +173,7 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                                 lc.setOrden((short) (lc.getOrden() - 1));
                             }
                         }
-                        tipoAccion = listaProductosCesta.isEmpty()? "eliminarPedido" : "eliminarLinea";
+                        tipoAccion = listaProductosCesta.isEmpty() ? "eliminarPedido" : "eliminarLinea";
                     }
                     break;
                 case "delete":
@@ -202,7 +200,14 @@ public class AjaxGestionarCarritoController extends HttpServlet {
             objeto.put("precio", lineaCesta.getPrecioUnitario());
             objeto.put("cantidadTotal", cantidadProductosCesta);
             objeto.put("total", total);
+            if (cookieAnonimo == null) {
+                cookieAnonimo = new Cookie("cookieAnonimo", "");
+            }
+            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
+            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
         } else {
+            cookieAnonimo = new Cookie("cookieAnonimo", "");
+            cookieAnonimo.setMaxAge(0);
             request.getSession().removeAttribute("listaProductosCesta");
             request.getSession().removeAttribute("cantidadProductosCesta");
             request.getSession().removeAttribute("totalCesta");
@@ -211,6 +216,11 @@ public class AjaxGestionarCarritoController extends HttpServlet {
         }
 
         if (request.getSession().getAttribute("usuario") != null) {
+            if (cookieAnonimo == null) {
+                cookieAnonimo = new Cookie("cookieAnonimo", "");
+            }
+            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
+            cookieAnonimo.setMaxAge(0);
             usuario = (Usuario) request.getSession().getAttribute("usuario");
             if (tipoAccion.length() > 0) {
                 pedido.setIdUsuario((short) usuario.getIdUsuario());
@@ -233,7 +243,7 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                     }
                 } else {
                     Pedido p = new Pedido();
-                    p  = iped.obtenerPedidoNoFinalizado(pedido);
+                    p = iped.obtenerPedidoNoFinalizado(pedido);
                     pedido.setIdPedido(p.getIdPedido());
                     lineaPedido.setIdPedido(pedido.getIdPedido());
                     lineaPedido.setIdProducto(lineaCesta.getIdProducto());
@@ -268,15 +278,9 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                     }
                 }
             }
-        } else {
-            if (cookieAnonimo == null) {
-                cookieAnonimo = new Cookie("cookieAnonimo", "");
-            }
-            cookieAnonimo = UtilidadesCookie.cargarCookie(listaProductosCesta);
-            cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
-            response.addCookie(cookieAnonimo);
         }
 
+        response.addCookie(cookieAnonimo);
         response.setContentType("application/json");
         response.getWriter().print(objeto);
     }

@@ -49,13 +49,13 @@
                            placeholder="Ej: joaquin08@gmail.com">
                 </div>
                 <div class="form__group">
-                    <label for="password" class="label">Contraseña</label>
+                    <label for="password" class="label">Contrase&ncaron;a</label>
                     <input type="password" class="input__login" id="password" name="password"
                            placeholder="Ej: 123asd$=">
                 </div>
                 <div class="form__group show">
                     <input type="checkbox" id="show">
-                    <label for="show">Mostrar contraseña</label>
+                    <label for="show">Mostrar contrase&ncaron;a</label>
                 </div>
             </div>
             <div class="login__footer">
@@ -148,14 +148,19 @@
                     <span class="material-icons">search</span>
                 </a>
             </li>
-            <li class="nav__item">
+            <li class="nav__item" id="cuenta">
             <c:choose>
                 <c:when test="${sessionScope.usuario!=null}">
-                    <form action="GestionarCuentaController" method="POST">
-                        <button class="nav__item__button btn__usuario" title="Mi Cuenta" id="open__modal__login">
+                    <form action="OpcionesCuentaUsuarioController" method="POST" class="form__usuario">
+                        <button name="accion" value="verPerfil" class="nav__item__button btn__usuario" title="Mi Cuenta" id="open__modal__login">
                             <img src="${contexto}/IMAGENES/AVATARES/${usuario.avatar}" class="avatar__usuario"/>
                             <p><c:out value="${usuario.nombre}"/></p>
                         </button>  
+                        <ul class="opcionesUsuario">
+                            <li><button name="accion" value="cerrarSesion" class="btn__opcion__usuario">Cerrar sesi&oacute;n</button></li>
+                            <li><button name="accion" value="verPerfil" class="btn__opcion__usuario">Editar perfil</button></li>
+                            <li><button name="accion" value="verPedidos" class="btn__opcion__usuario">Ver pedidos</button></li>
+                        </ul>
                     </form>
                 </c:when>
                 <c:when test="${sessionScope.usuario==null}">

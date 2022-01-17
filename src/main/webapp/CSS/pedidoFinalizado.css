@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 16-ene-2022, 22:20:53
+    Author     : Manuel Guillén Gallardo
+*/
+
+.pedido__finalizado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 90px;
+    padding: 1rem;
+}
+h1 {
+    color: #F68E5F;
+}
+.finalizado__body {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    padding: 2rem;
+}
+table {
+    margin-top: 1rem;
+    border-collapse: collapse;
+    border: 1px solid #dadada;
+}
+th, td {
+    padding: .5rem;
+    text-align: right;
+    
+}
+.tr__dato:hover {
+    background: #F68E5F;
+    color: white;
+}
+td > span {
+    font-weight: bold;
+}
+.btn__pedidoF{
+    padding: .5rem;
+    font-size: 20px;
+    background: #070212;
+    color: #F68E5F;
+    transition: .4s;
+}
+.btn__pedidoF:hover{
+    background: #F68E5F;
+    color: white;
+}

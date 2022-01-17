@@ -6,13 +6,10 @@
 package es.albarregas.controllers;
 
 import es.albarregas.DAO.IPedidoDAO;
-import es.albarregas.DAO.IProductoDAO;
 import es.albarregas.DAOFactory.DAOFactory;
-import es.albarregas.beans.LineaCesta;
 import es.albarregas.beans.Pedido;
 import es.albarregas.beans.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Manuel Guillén Gallardo
  */
-@WebServlet(name = "FinalizarCarritoController", urlPatterns = {"/FinalizarCarritoController"})
-public class FinalizarCarritoController extends HttpServlet {
+@WebServlet(name = "OpcionesCuentaUsuarioController", urlPatterns = {"/OpcionesCuentaUsuarioController"})
+public class OpcionesCuentaUsuarioController extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -53,32 +50,38 @@ public class FinalizarCarritoController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = "JSP/usuario.jsp";
-        ArrayList<LineaCesta> listaProductosCesta = new ArrayList<>();
-        LineaCesta lineaCesta = new LineaCesta();
-        Pedido pedido = null;
-        Usuario usuario = null;
-        
+        String accion = "";
+        ArrayList<Pedido> listaPedidos = new ArrayList<>();
+        Usuario nuevoU = new Usuario();
         DAOFactory daof = DAOFactory.getDAOFactory(1);
         IPedidoDAO iped = daof.getPedidoDAO();
 
-        if (request.getSession().getAttribute("usuario") == null) {
-            url = "FrontController";
-            request.setAttribute("mensajeCrearCuenta", "crear");
-        } else {
-            if (request.getSession().getAttribute("listaProductosCesta") != null) {
-                usuario = (Usuario) request.getSession().getAttribute("usuario");
-                listaProductosCesta = (ArrayList<LineaCesta>) request.getSession().getAttribute("listaProductosCesta");
-                pedido = new Pedido();
-                pedido.setIdUsuario((short) usuario.getIdUsuario());
-                Pedido pedidoFinalizado = new Pedido();
-                pedidoFinalizado = iped.obtenerPedidoNoFinalizado(pedido);
-                iped.cambiarEstadoPedido(pedido);
-                request.setAttribute("listaProductosPedidoFinalizado", listaProductosCesta);
-                request.setAttribute("pedidoFinalizado", pedidoFinalizado);
-                request.getSession().removeAttribute("listaProductosCesta");
-                request.getSession().removeAttribute("cantidadProductosCesta");
-                request.getSession().removeAttribute("totalCesta");
-            } 
+        if (request.getParameter("accion") != null) {
+            accion = request.getParameter("accion");
+            switch (accion) {
+                case "volver":
+                    url = "FrontController";
+                case "verPerfil":
+                    request.setAttribute("verPerfil", "verPerfil");
+                    break;
+                case "verPedidos":
+                    request.setAttribute("verPedidos", "verPedidos");
+                    nuevoU = (Usuario) request.getSession().getAttribute("usuario");
+                    listaPedidos = iped.obtenerTodosLosPedidos(nuevoU);
+                    if(!listaPedidos.isEmpty()) {
+                        request.setAttribute("listaPedidos", listaPedidos);
+                    }
+                    
+                    break;
+                case "cerrarSesion":
+                    url = "FrontController";
+                    request.setAttribute("volver", "volver");
+                    request.getSession().removeAttribute("usuario");
+                    request.getSession().removeAttribute("listaProductosCesta");
+                    request.getSession().removeAttribute("cantidadProductosCesta");
+                    request.getSession().removeAttribute("totalCesta");
+                    break;
+            }
         }
         request.getRequestDispatcher(url).forward(request, response);
     }

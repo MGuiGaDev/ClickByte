@@ -11,17 +11,6 @@
  * @desc [pixer.com]
  */
 
-/**
- * Botón de usuario logueado.
- */
-let usuarioLogueado = `
-<li class="nav__item">
-    <a href="#" class="nav__item__button" title="Mi Cuenta" id="open__cuenta">
-        <img src="IMAGENES/perfil.jpg" class="imagen__perfil" id="imagen__perfil"">
-        <span class="nav__item__text" id="usuario__nombre">mguilleng02@</span>
-    </a>
-</li>
-`;
 
 /**
  * Variables para el tratamiento de eventos relacionados con el carrito y su ventana modal.
@@ -56,6 +45,10 @@ let modal__busqueda;
 let form__busqueda;
 let cerrar__modal__busqueda;
 
+/*
+ * Variable para controlar la visualización de las opciones de usuario logueado.
+ */
+let cuenta;
 
 document.addEventListener("DOMContentLoaded", asignarEventos);
 
@@ -63,6 +56,10 @@ function asignarEventos() {
 
     nav = document.querySelector(".nav");
 
+    cuenta = document.getElementById("cuenta");
+    cuenta.addEventListener("mouseover", visualizarOpciones);
+    cuenta.addEventListener("mouseout", ocultarOpciones);
+    
     modal__carrito = document.getElementById("modal__carrito");
     open__carrito = document.getElementById("open__carrito");
     open__carrito.addEventListener("click", visualizarCarrito);
@@ -77,11 +74,11 @@ function asignarEventos() {
 
     btn__login = document.getElementById("btn__login");
     open__modal__login.addEventListener("click", visualizarLogin);
-    
+
     modal__menu = document.getElementById("modal__menu");
     btn__menu = document.getElementById("btn__menu");
     btn__menu.addEventListener("click", visualizarMenu);
-    
+
     buscar = document.getElementById("buscar");
     modal__busqueda = document.getElementById("modal__busqueda");
     form__busqueda = document.getElementById("form__busqueda");
@@ -93,7 +90,12 @@ function asignarEventos() {
         cerrarModalesGlobal(evento.target);
     });
 }
-
+function visualizarOpciones(){
+    document.querySelector(".opcionesUsuario").classList.add("opcionesUsuario-activo");
+}
+function ocultarOpciones() {
+    document.querySelector(".opcionesUsuario").classList.remove("opcionesUsuario-activo");
+}
 function visualizarBusqueda() {
     modal__busqueda.classList.add("modal__busqueda-activo");
 }
@@ -139,7 +141,7 @@ function cerrarModalesGlobal(evento) {
             break;
         case ((evento === cerrar__modal__busqueda || !form__busqueda.contains(evento)) && !buscar.contains(evento) && modal__busqueda.classList.contains("modal__busqueda-activo")):
             modal__busqueda.classList.remove("modal__busqueda-activo");
-        break;
+            break;
         case (!btn__menu.contains(evento) && !modal__menu.contains(evento) && modal__menu.classList.contains("modal__menu-activo")):
             btn__menu.childNodes[1].innerText = "menu";
             modal__menu.classList.remove("modal__menu-activo");

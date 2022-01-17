@@ -143,7 +143,27 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
     border-radius: 50%;
     border: 1px solid white;
 }
-
+.opcionesUsuario {
+    position: absolute;
+    list-style: none;
+    color: white;
+    display: none;
+}
+.opcionesUsuario-activo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.btn__opcion__usuario {
+    background: #070212;
+    color: #F68E5F;
+    padding: .2rem 0;
+    width: 90px;
+}
+.btn__opcion__usuario:hover{
+    background: #F68E5F;
+    color: white;
+}
 .nav__item__button:hover {
     background: var(--c-primary);
     color: white;

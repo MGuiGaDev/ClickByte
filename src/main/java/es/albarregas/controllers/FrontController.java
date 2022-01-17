@@ -33,7 +33,7 @@ public class FrontController extends HttpServlet {
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
 
-        if (request.getParameter("volver") == null) {
+        if (request.getParameter("volver") == null && request.getAttribute("volver") == null) {
             if (cookieAnonimo != null) {
                 listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
                 if (!listaProductosCesta.isEmpty()) {
@@ -46,7 +46,6 @@ public class FrontController extends HttpServlet {
                     request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
                     request.getSession().setAttribute("totalCarrito", total);
                 }
-                cookieAnonimo.setMaxAge(60 * 60 * 24 * 2);
                 response.addCookie(cookieAnonimo);
             }
         }
