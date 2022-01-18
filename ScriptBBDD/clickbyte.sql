@@ -2,7 +2,6 @@ CREATE DATABASE  IF NOT EXISTS `clickbyte` /*!40100 DEFAULT CHARACTER SET utf8 C
 USE `clickbyte`;
 CREATE USER admin_clickbyte@localhost identified BY '1234';
 GRANT ALL ON `clickbyte`.* TO admin_clickbyte@localhost;
-
 -- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: clickbyte
@@ -63,7 +62,7 @@ CREATE TABLE `lineaspedidos` (
   KEY `fk_idPedido` (`IdPedido`),
   CONSTRAINT `fk_idPedido` FOREIGN KEY (`IdPedido`) REFERENCES `pedidos` (`IdPedido`),
   CONSTRAINT `fk_idProducto` FOREIGN KEY (`IdProducto`) REFERENCES `productos` (`IdProducto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,6 +71,7 @@ CREATE TABLE `lineaspedidos` (
 
 LOCK TABLES `lineaspedidos` WRITE;
 /*!40000 ALTER TABLE `lineaspedidos` DISABLE KEYS */;
+INSERT INTO `lineaspedidos` VALUES (74,17,21,1,1),(75,18,21,1,1);
 /*!40000 ALTER TABLE `lineaspedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,7 +92,7 @@ CREATE TABLE `pedidos` (
   PRIMARY KEY (`IdPedido`),
   KEY `fk_idUsuario` (`IdUsuario`),
   CONSTRAINT `fk_idUsuario` FOREIGN KEY (`IdUsuario`) REFERENCES `usuarios` (`IdUsuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,6 +101,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (21,'2022-01-18','f',33,166.00,34.86);
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,10 +156,10 @@ CREATE TABLE `usuarios` (
   `Localidad` varchar(40) COLLATE utf8_spanish_ci NOT NULL,
   `Provincia` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `UltimoAcceso` datetime DEFAULT NULL,
-  `Avatar` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `avatar` text COLLATE utf8_spanish_ci,
   PRIMARY KEY (`IdUsuario`),
   UNIQUE KEY `uc_email` (`Email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +168,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'manuelguiga@gmail.com','1','Manuel','Guillén Gallardo','11111111S',NULL,'Calle Ya me queda menos','06200','Almendralejo','Badajoz',NULL,NULL);
+INSERT INTO `usuarios` VALUES (32,'maria@gmail.com','2a3dfa6625bf3b72f9345edd7a30b333','María','Tempestad','12312312K','123123123','Calle Open Australia','06209','Almendralejo','Badajoz','2022-01-18 13:08:21','La imagen no tiene el formato adecuado'),(33,'viernesvino@gmail.com','2a3dfa6625bf3b72f9345edd7a30b333','Boris','Jhonson','11111111H','111111111','Downing Street','11111','Londres','Londres','2022-01-18 13:11:24','La imagen no tiene el formato adecuado');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -180,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-06 10:11:32
+-- Dump completed on 2022-01-18 13:28:41
