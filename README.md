@@ -1,4 +1,34 @@
 # ClickByte
 
-- He solucionado el tema de index.jsp. En lugar de usar la etiqueta A, uso FORM y BUTTON
-- Tengo un nuevo problema a la hora de tratar de actualizar mediante AJAX el precio total de los productos en carrito. Esto se gestiona en GestionarCarrito.java, gestionarCarrito.js. Lo curioso es que la cantidad si me la devuelve la petición, pero el precio total no.
+## Contenidos
+
+### Usuario creado:
+
+Nombre: María
+
+Email: maria@gmail.com
+
+Password: 12312312a=
+
+Pedidos: 0
+
+
+
+### Usuario creado:
+
+Nombre: Boris
+
+Email: viernesvino@gmail.com
+
+Password: 12312312a=
+
+Pedidos: 1
+
+Codigo de Pedido: 21
+
+
+### Comenzar con cookie
+
+Si se desea comenzar con una Cookie, introducir en FrontController (línea 34):
+
+Cookie cookieAnonimo = new Cookie("cookieAnonimo", "45-1#5-1#8-1");
