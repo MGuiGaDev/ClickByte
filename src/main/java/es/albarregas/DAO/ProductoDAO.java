@@ -23,44 +23,7 @@ import java.util.logging.Logger;
 public class ProductoDAO implements IProductoDAO {
 
     private static Connection conexion = null;
-    @Override
-    public ArrayList<Producto> listarProductos() {
-        ArrayList<Producto> listadoProductos = new ArrayList<>();
-        Producto producto = null;
-        Statement productosST = null;
-        ResultSet productoRS = null;
-        String consulta = "SELECT p.idProducto, p.IdCategoria, p.nombre, p.descripcion, p.precio, p.marca, p.imagen from productos p inner join categorias c using (IdCategoria);";
-
-        try {
-            conexion = ConnectionFactory.openConnectionMysql();
-            productosST = conexion.createStatement();
-            productoRS = productosST.executeQuery(consulta);
-            while (productoRS.next()) {
-                producto = new Producto();
-                producto.setIdProducto(productoRS.getShort(1));
-                producto.setIdCategoria(productoRS.getShort(2));
-                producto.setNombre(productoRS.getString(3));
-                producto.setDescripcion(productoRS.getString(4));
-                producto.setPrecio(productoRS.getDouble(5));
-                producto.setMarca(productoRS.getString(6));
-                producto.setDireccionImagen(productoRS.getString(7));
-                listadoProductos.add(producto);
-            }
-        } catch (SQLException ex) {
-
-            System.out.println("Fallo en la conexión.");
-
-        } finally {
-            try {
-                productosST.close();
-                productoRS.close();
-                closeConnection();
-            } catch (SQLException ex) {
-                Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return listadoProductos;
-    }
+   
 
     @Override
     public Producto cargarProducto (Producto producto) {

@@ -20,6 +20,10 @@ import es.albarregas.DAO.IUsuarioDAO;
  *
  * @author Manuel Guillén Gallardo
  */
+/**
+ * 
+ * @author Manuel Guillén Gallardo
+ */
 @WebServlet(name = "AjaxValidarCuentaController", urlPatterns = {"/AjaxValidarCuentaController"})
 public class AjaxValidarCuentaController extends HttpServlet {
 

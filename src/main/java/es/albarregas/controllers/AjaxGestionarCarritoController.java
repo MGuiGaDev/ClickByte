@@ -32,6 +32,35 @@ import org.json.JSONObject;
  *
  * @author Manuel Guillén Gallardo
  */
+/**
+ * <h1>Función</h1>
+ * <p>
+ * Mediante este Servlet gestionaremos la cesta de un usuario dinámicamente.
+ * A ete se accede desde cualquier lugar de la aplicación.</p>
+ * <h2>Flujo</h2>
+ * <ol>
+ * <li>Recibimos una petición AJAX que representa una acción realizada por el usuario.</li>
+ * <li>Cargamos un atributo de sesión (de existir, lo actualizamos), con los datos recibidos: añadir producto a cesta vacía, añadir producto a cesta no vacía, eliminar producto de cesta, eliminar cesta.</li>
+ * <li>Cargamos el objeto JSON que vamos a devolver a la petición AJAX.</li>
+ * <li>Dependiendo de si se trata de una acción realizada por un usuario logueado o anónimo cargamos un atributo de sesión usuario, o una cookie.</li>
+ * <h2>Variable "tipoAccion"</h2>
+ * <p>
+ * Esta variable nos sirve para determinar en caso de que exista atributo de
+ * sesión "usuario" qué tipo de acción vamos a realizar en la BBDD:</p>
+ * <ol>
+ * <li>"insertar"</li>
+ * <li>"actualizar"</li>
+ * <li>"eliminarLinea"</li>
+ * <li>"eliminarPedido"</li>
+ * </ol>
+ * <h2>Observaciones</h2>
+ * <p>
+ * Dado que se ha cometido el error de no dividir la gestión de la cesta de los
+ * usuarios dependiendo de si estamos ante un usuario logueado o anónimo,
+ * tenemos este archivo exvesivamente extenso.</p>
+ *
+ * @author Manuel Guillén Gallardo
+ */
 @WebServlet(name = "AjaxGestionarCarritoController", urlPatterns = {"/AjaxGestionarCarritoController"})
 public class AjaxGestionarCarritoController extends HttpServlet {
 
@@ -68,16 +97,7 @@ public class AjaxGestionarCarritoController extends HttpServlet {
         String accion = request.getParameter("accion");
         JSONObject objeto = null;
 
-        //Esta variable nos sirve para determinar en caso de que exista atributo de sesión "usuario"
-        //qué tipo de acción vamos a realizar en la BBDD:
-        //1. "insertar"
-        //2. "actualizar"
-        //3. "crear"
-        //3. "eliminarLinea"
-        //4. "eliminarPedido"
         String tipoAccion = "";
-        //nos sirve para saber si se ha eliminado una lineaCesta, en cuyo caso se restara
-        //1 al atributo "orden" de los productos posteriores
         boolean remove = false;
 
         Cookie[] co = request.getCookies();
@@ -277,7 +297,6 @@ public class AjaxGestionarCarritoController extends HttpServlet {
 
         }
 
-        
         response.setContentType("application/json");
         response.getWriter().print(objeto);
     }
