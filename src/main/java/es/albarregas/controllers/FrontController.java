@@ -33,11 +33,12 @@ public class FrontController extends HttpServlet {
         Cookie[] co = request.getCookies();
         Cookie cookieAnonimo = UtilidadesCookie.comprobarCookieAnonimo(co, "cookieAnonimo");
 
+        DAOFactory daof = DAOFactory.getDAOFactory(1);
+        IProductoDAO ipd = daof.getProductoDAO();
+        
         if (request.getParameter("volver") == null) {
-            if (cookieAnonimo != null) {
+            if (cookieAnonimo == null || cookieAnonimo.getValue().equals("")) {
                 if (!listaProductosCesta.isEmpty()) {
-                    DAOFactory daof = DAOFactory.getDAOFactory(1);
-                    IProductoDAO ipd = daof.getProductoDAO();
                     listaProductosCesta = ipd.cargarProductosCarrito(listaProductosCesta);
                     int cantidadProductosCesta = UtilidadesLineaCesta.cantidadTotalProductosCesta(listaProductosCesta);
                     double total = UtilidadesLineaCesta.calcularTotal(listaProductosCesta);
@@ -45,7 +46,14 @@ public class FrontController extends HttpServlet {
                     request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
                     request.getSession().setAttribute("totalCarrito", total);
                 }
-                response.addCookie(cookieAnonimo);
+            } else {
+                listaProductosCesta = UtilidadesCookie.cargarListaProductos(cookieAnonimo);
+                listaProductosCesta = ipd.cargarProductosCarrito(listaProductosCesta);
+                int cantidadProductosCesta = UtilidadesLineaCesta.cantidadTotalProductosCesta(listaProductosCesta);
+                double total = UtilidadesLineaCesta.calcularTotal(listaProductosCesta);
+                request.getSession().setAttribute("listaProductosCesta", listaProductosCesta);
+                request.getSession().setAttribute("cantidadProductosCesta", cantidadProductosCesta);
+                request.getSession().setAttribute("totalCesta", total);
             }
         }
 

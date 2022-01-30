@@ -6,10 +6,8 @@
 package es.albarregas.models;
 
 import es.albarregas.beans.LineaCesta;
-import es.albarregas.beans.Producto;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.Cookie;
 
 /**

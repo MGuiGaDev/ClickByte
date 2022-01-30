@@ -143,8 +143,9 @@ public class ProductoDAO implements IProductoDAO {
 
     @Override
     public ArrayList<LineaCesta> cargarProductosCarrito(ArrayList<LineaCesta> listaProductosCesta) {
-        LineaCesta listaCesta = null;
+        LineaCesta lineaCesta = null;
         StringBuilder listaIdProductos = new StringBuilder();
+        ArrayList<LineaCesta> nuevaListaProductosCesta = new ArrayList<>();
         int count = 0;
         for (LineaCesta lC : listaProductosCesta) {
             count++;
@@ -153,6 +154,7 @@ public class ProductoDAO implements IProductoDAO {
                 listaIdProductos.append(",");
             }
         }
+        
         Statement productosST = null;
         ResultSet productoRS = null;
         String consulta = "SELECT idProducto, nombre, precio, marca, imagen from productos where idProducto in ("+listaIdProductos.toString()+");";
@@ -161,18 +163,18 @@ public class ProductoDAO implements IProductoDAO {
             productosST = conexion.createStatement();
             productoRS = productosST.executeQuery(consulta);
             while (productoRS.next()) {
-                listaCesta = new LineaCesta();
-                listaCesta.setIdProducto(productoRS.getShort(1));
-                listaCesta.setNombre(productoRS.getString(2));
-                listaCesta.setPrecioUnitario(productoRS.getDouble(3));
-                listaCesta.setMarca(productoRS.getString(4));
-                listaCesta.setNombreImagen(productoRS.getString(5));
+                lineaCesta = new LineaCesta();
+                lineaCesta.setIdProducto(productoRS.getShort(1));
+                lineaCesta.setNombre(productoRS.getString(2));
+                lineaCesta.setPrecioUnitario(productoRS.getDouble(3));
+                lineaCesta.setMarca(productoRS.getString(4));
+                lineaCesta.setNombreImagen(productoRS.getString(5));
                 for(LineaCesta lC : listaProductosCesta) {
-                    if(listaCesta.getIdProducto() == lC.getIdProducto()){
-                        listaCesta.setCantidad(lC.getCantidad());
+                    if(lineaCesta.getIdProducto() == lC.getIdProducto()){
+                        lineaCesta.setCantidad(lC.getCantidad());
                     }
                 }
-                listaProductosCesta.add(listaCesta);
+                nuevaListaProductosCesta.add(lineaCesta);
             }
         } catch (SQLException ex) {
 
@@ -187,7 +189,7 @@ public class ProductoDAO implements IProductoDAO {
                 Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return listaProductosCesta;
+        return nuevaListaProductosCesta;
     }
 
     

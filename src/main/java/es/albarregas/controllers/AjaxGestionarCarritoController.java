@@ -35,14 +35,18 @@ import org.json.JSONObject;
 /**
  * <h1>Función</h1>
  * <p>
- * Mediante este Servlet gestionaremos la cesta de un usuario dinámicamente.
- * A ete se accede desde cualquier lugar de la aplicación.</p>
+ * Mediante este Servlet gestionaremos la cesta de un usuario dinámicamente. A
+ * ete se accede desde cualquier lugar de la aplicación.</p>
  * <h2>Flujo</h2>
  * <ol>
- * <li>Recibimos una petición AJAX que representa una acción realizada por el usuario.</li>
- * <li>Cargamos un atributo de sesión (de existir, lo actualizamos), con los datos recibidos: añadir producto a cesta vacía, añadir producto a cesta no vacía, eliminar producto de cesta, eliminar cesta.</li>
+ * <li>Recibimos una petición AJAX que representa una acción realizada por el
+ * usuario.</li>
+ * <li>Cargamos un atributo de sesión (de existir, lo actualizamos), con los
+ * datos recibidos: añadir producto a cesta vacía, añadir producto a cesta no
+ * vacía, eliminar producto de cesta, eliminar cesta.</li>
  * <li>Cargamos el objeto JSON que vamos a devolver a la petición AJAX.</li>
- * <li>Dependiendo de si se trata de una acción realizada por un usuario logueado o anónimo cargamos un atributo de sesión usuario, o una cookie.</li>
+ * <li>Dependiendo de si se trata de una acción realizada por un usuario
+ * logueado o anónimo cargamos un atributo de sesión usuario, o una cookie.</li>
  * <h2>Variable "tipoAccion"</h2>
  * <p>
  * Esta variable nos sirve para determinar en caso de que exista atributo de
@@ -295,6 +299,10 @@ public class AjaxGestionarCarritoController extends HttpServlet {
                 response.addCookie(cookieAnonimo);
             }
 
+        } else {
+            cookieAnonimo = new Cookie("cookieAnonimo", "");
+            cookieAnonimo.setMaxAge(0);
+            response.addCookie(cookieAnonimo);
         }
 
         response.setContentType("application/json");

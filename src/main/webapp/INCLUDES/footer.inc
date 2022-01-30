@@ -6,7 +6,7 @@
                 <li>Premium</li>
                 <li>C&oacute;mo comprar</li>
                 <li>Formas de pago</li>
-                <li>Gastos de envío</li>
+                <li>Gastos de env&iacute;o</li>
                 <li>Cupones descuento</li>
                 <li>Preguntas frecuentes</li>
             </ul>
